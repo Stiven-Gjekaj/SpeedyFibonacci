@@ -262,26 +262,26 @@ SpeedyFibonacci/
 ## 🎓 Educational Value
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#2d1b69', 'primaryTextColor': '#e6e8ef', 'primaryBorderColor': '#7c3aed', 'lineColor': '#7c3aed', 'secondBkgColor': '#111217', 'tertiaryColor': '#1a1a2e'}}}%%
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#2d1b69', 'primaryTextColor': '#e6e8ef', 'primaryBorderColor': '#7c3aed', 'lineColor': '#7c3aed', 'secondBkgColor': '#111217', 'tertiaryColor': '#1a1a2e', 'noteBkgColor': '#111217', 'noteBorderColor': '#7c3aed', 'noteTextColor': '#e6e8ef', 'fontFamily': 'Inter, sans-serif'}}}%%
 mindmap
-  root((SpeedyFibonacci))
-    Algorithm Complexity
+  root((🎯 SpeedyFibonacci))
+    🔢 Algorithm Complexity
       Exponential vs Linear vs Logarithmic
       Real-world performance
       Call tree visualization
-    Dynamic Programming
+    📊 Dynamic Programming
       Top-down memoization
       Bottom-up tabulation
       Space-time tradeoffs
-    Python Optimization
+    ⚡ Python Optimization
       NumPy vectorization
       Numba JIT compilation
       Cython C extensions
-    Mathematics
+    🧮 Mathematics
       Golden ratio phi
       Matrix identities
       Binet's formula
-    Software Design
+    🏗️ Software Design
       Abstract interfaces
       Modular architecture
       Benchmarking methodology

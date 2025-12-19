@@ -1,12 +1,24 @@
-# Fast Doubling
+<div align="center">
 
-## Overview
+# ⚡ Fast Doubling
 
-Fast doubling is an elegant O(log n) algorithm for computing Fibonacci numbers. It uses two mathematical identities that allow us to "jump" through the sequence, computing F(2n) from F(n) without computing all intermediate values.
+**An Elegant O(log n) Algorithm Using Mathematical Identities**
 
-## Algorithm Description
+[← Back to Techniques](../../README.md#-implemented-techniques)
 
-The algorithm is based on these identities (derivable from matrix exponentiation):
+</div>
+
+---
+
+## 🏃 Overview
+
+Fast doubling is an elegant **O(log n)** algorithm for computing Fibonacci numbers. It uses two mathematical identities that allow us to "jump" through the sequence, computing **F(2n) from F(n)** without computing all intermediate values.
+
+**Key insight:** Process the binary representation of n, doubling our progress at each step.
+
+## 🔍 Algorithm Description
+
+The algorithm is based on two elegant identities (derivable from matrix exponentiation):
 
 ```
 F(2n)   = F(n) × [2×F(n+1) - F(n)]
@@ -63,24 +75,19 @@ Process bit 1 (LSB):
 Result: F(13) = 233 ✓
 ```
 
-## Complexity Analysis
+## 📊 Complexity Analysis
 
-### Time Complexity: O(log n)
+| Aspect | Complexity | Details |
+|--------|-----------|----------|
+| **Time (Recursive)** | **O(log n)** | Recursion depth is log₂(n); O(1) ops per level |
+| **Time (Iterative)** | **O(log n)** | Process n.bit_length() bits; O(1) ops per bit |
+| **Space (Recursive)** | **O(log n)** | Recursion stack depth |
+| **Space (Iterative)** | **O(1)** | No stack, constant variables |
 
-- Recursion depth is log₂(n)
-- Each level does O(1) arithmetic operations*
-- Total: O(log n) levels
+> [!IMPORTANT]
+> For very large Fibonacci numbers, multiplication of k-digit numbers takes O(k log k) with FFT-based methods, making the true complexity **O(log n × M(digits))**.
 
-*For very large Fibonacci numbers, multiplication of k-digit numbers takes O(k log k) with FFT-based methods, making the true complexity O(log n × M(digits)).
-
-### Space Complexity: O(log n)
-
-- Recursion depth is O(log n)
-- Each level stores O(1) variables
-
-The iterative version achieves O(1) auxiliary space.
-
-## Mathematical Background
+## 🧮 Mathematical Background
 
 ### Derivation from Matrix Identity
 
@@ -120,18 +127,18 @@ F(n+m)  = F(n)×F(m-1) + F(n+1)×F(m)
 F(n-m)  = (-1)^m × [F(n)×F(m+1) - F(n+1)×F(m)]
 ```
 
-## Performance Characteristics
+## ⚡ Performance Characteristics
 
-| n | Time (approx) | Recursion Depth |
-|---|--------------|-----------------|
-| 100 | < 1ms | 7 |
-| 1,000 | < 1ms | 10 |
-| 10,000 | ~1ms | 14 |
-| 100,000 | ~10ms | 17 |
-| 1,000,000 | ~100ms | 20 |
-| 10,000,000 | ~1s | 24 |
+| n | Time (approx) | Recursion Depth | Use Case |
+|---|--------------|-----------------|----------|
+| 100 | < 1ms | 7 | Small |
+| 1,000 | < 1ms | 10 | Medium |
+| 10,000 | ~1ms | 14 | Large |
+| 100,000 | ~10ms | 17 | Very Large |
+| 1,000,000 | ~100ms | 20 | Huge |
+| 10,000,000 | ~1s | 24 | Massive |
 
-**In our 1-second benchmark**: Fast doubling is excellent for computing large individual Fibonacci numbers but has overhead for computing many small sequential values.
+**🏆 In our 1-second benchmark**: Fast doubling **excels at computing large individual F(n)** but has startup overhead for many small sequential values.
 
 ## Implementation Details
 
@@ -175,20 +182,22 @@ def fib_iterative(n):
 
 Fast doubling is essentially an optimized version of matrix exponentiation!
 
-## When to Use
+## ✅ When to Use
 
-**Use this technique when:**
-- Computing individual large F(n)
-- O(log n) complexity is needed
+### ✓ Use When
+- Computing **individual large F(n)** (n > 100,000)
+- **O(log n) complexity is needed** for huge values
 - Memory efficiency matters
-- Teaching advanced Fibonacci methods
+- Teaching advanced algorithm techniques
+- Working with cryptographic applications
 
-**Don't use when:**
+### ✗ Don't Use When
 - Computing many sequential Fibonacci numbers
-- n is small (overhead not worth it)
-- Simplicity is prioritized
+- n is small (startup overhead not worth it)
+- Simplicity and readability are prioritized
+- Working with very limited recursion depth
 
-## Advanced Topics
+## 🎓 Advanced Topics
 
 ### Negative Indices
 
@@ -226,17 +235,14 @@ gcd(F(m), F(n)) = F(gcd(m, n))
 
 Fast doubling enables efficient computation of F(gcd(m,n)).
 
-## References
+## 📚 References
 
-1. Nayuki. "Fast Fibonacci algorithms". https://www.nayuki.io/page/fast-fibonacci-algorithms [Excellent detailed explanation]
+1. **Nayuki.** "Fast Fibonacci algorithms". https://www.nayuki.io/page/fast-fibonacci-algorithms [Excellent detailed explanation]
+2. **Takahashi, D.** (2000). "A Fast Algorithm for Computing Large Fibonacci Numbers". *Information Processing Letters*, 75(6), 243-246.
+3. **OEIS A000045.** "Fibonacci numbers". https://oeis.org/A000045
+4. **Knuth, D.E.** (1997). *The Art of Computer Programming, Volume 1* (3rd ed.). Section 1.2.8.
 
-2. Takahashi, D. (2000). "A Fast Algorithm for Computing Large Fibonacci Numbers". *Information Processing Letters*, 75(6), 243-246.
-
-3. OEIS A000045. "Fibonacci numbers". https://oeis.org/A000045
-
-4. Knuth, D.E. (1997). *The Art of Computer Programming, Volume 1* (3rd ed.). Section 1.2.8.
-
-## Example
+## 💡 Example Usage
 
 ```python
 from techniques.11_fast_doubling.fibonacci import FastDoubling

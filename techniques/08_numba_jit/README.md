@@ -1,12 +1,51 @@
-# Numba JIT
+<div align="center">
 
-## Overview
+# ⚡ Numba JIT
 
-Numba is a Just-In-Time (JIT) compiler that translates Python code to optimized machine code using LLVM. This technique demonstrates how to achieve near-C performance while writing pure Python, making it one of the fastest methods for numerical Fibonacci computation.
+[![Complexity](https://img.shields.io/badge/Time-O(n)-yellow?style=flat-square)]()
+[![Space](https://img.shields.io/badge/Space-O(1)-brightgreen?style=flat-square)]()
+[![Type](https://img.shields.io/badge/Type-JIT_Compiled-blue?style=flat-square)]()
+[![Requires](https://img.shields.io/badge/Requires-Numba-00A3E0?style=flat-square)]()
 
-## Algorithm Description
+*Near-C performance with pure Python syntax via LLVM compilation*
 
-The algorithm is the same simple iterative approach, but JIT-compiled:
+</div>
+
+---
+
+## 📖 Overview
+
+Numba is a **Just-In-Time (JIT) compiler** that translates Python code to optimized machine code using LLVM. This technique demonstrates how to achieve near-C performance while writing pure Python.
+
+> [!TIP]
+> Numba is one of the **fastest** methods for numerical Fibonacci computation when n ≤ 92!
+
+---
+
+## 🔢 Algorithm Description
+
+```mermaid
+flowchart LR
+    subgraph Python["🐍 Python Code"]
+        A["@jit decorator"]
+    end
+
+    subgraph LLVM["⚡ LLVM"]
+        B["Machine Code"]
+    end
+
+    subgraph Speed["🚀 Result"]
+        C["10-100x Faster"]
+    end
+
+    Python --> LLVM --> Speed
+
+    style Python fill:#3776AB,stroke:#2b5d8e,color:#fff
+    style LLVM fill:#00A3E0,stroke:#0082b3,color:#fff
+    style Speed fill:#27ae60,stroke:#1e8449,color:#fff
+```
+
+### Python Implementation
 
 ```python
 from numba import jit
@@ -21,53 +60,54 @@ def fibonacci(n):
     return b
 ```
 
-The `@jit` decorator tells Numba to compile this function to machine code.
-
 ### Decorator Options
 
-- `nopython=True`: Force compilation without Python interpreter fallback
-- `cache=True`: Save compiled code to disk for faster subsequent imports
-- `parallel=True`: Enable automatic parallelization (not useful for Fibonacci)
-- `fastmath=True`: Allow faster but less precise floating-point operations
+| Option | Description |
+|--------|-------------|
+| `nopython=True` | Force compilation without Python fallback |
+| `cache=True` | Save compiled code to disk |
+| `parallel=True` | Enable automatic parallelization |
+| `fastmath=True` | Faster but less precise floating-point |
 
-## Complexity Analysis
+---
 
-### Time Complexity: O(n)
+## 📊 Complexity Analysis
 
-Same as iterative Python, but with much smaller constant factors:
-- No Python interpreter overhead
-- Direct CPU instructions
-- Optimized register usage
-- CPU cache-friendly
+### ⏱️ Time Complexity: `O(n)`
 
-### Space Complexity: O(1)
+Same as iterative Python, but with **much smaller constant factors**:
 
-- Two variables (a, b) stored in CPU registers
+| Factor | Benefit |
+|--------|---------|
+| No interpreter overhead | Direct CPU instructions |
+| Register optimization | Variables in CPU registers |
+| Cache-friendly | CPU cache-optimized |
+
+### 💾 Space Complexity: `O(1)`
+
+- Two variables stored in CPU registers
 - No dynamic memory allocation
 
-### Performance Multiplier
+---
 
-Typical speedups over pure Python:
-- Simple loops: 10-100x faster
-- Numerical operations: 50-200x faster
-- Close to hand-written C code
+## 📈 Performance Comparison
 
-## Performance Characteristics
-
-| n | Pure Python | Numba | Speedup |
-|---|-------------|-------|---------|
+| n | 🐍 Pure Python | ⚡ Numba | Speedup |
+|:-:|:--------------:|:-------:|:-------:|
 | 100 | ~1μs | ~0.1μs | ~10x |
 | 1,000 | ~10μs | ~0.5μs | ~20x |
 | 10,000 | ~100μs | ~5μs | ~20x |
 | 92 (max int64) | ~10μs | ~0.5μs | ~20x |
 
-**Note**: For n > 92, Numba overflows. Our implementation falls back to Python.
+> [!WARNING]
+> For n > 92, Numba overflows (int64 limit). Our implementation falls back to Python for larger values.
 
-**In our 1-second benchmark**: Numba will be among the fastest for computing many sequential Fibonacci numbers up to F(92).
+---
 
-## Implementation Details
+## 🔬 How It Works
 
-### First Call Compilation
+<details>
+<summary>⚙️ <strong>First Call Compilation</strong></summary>
 
 ```python
 @jit(nopython=True)
@@ -81,7 +121,10 @@ fib(10)
 fib(10)
 ```
 
-### Type Inference
+</details>
+
+<details>
+<summary>🔤 <strong>Type Inference</strong></summary>
 
 Numba infers types from function arguments:
 
@@ -92,111 +135,87 @@ def fib(n):  # n inferred as int64
     # ...
 ```
 
-### Explicit Type Signatures
+Explicit signature:
 
 ```python
 from numba import jit, int64
 
 @jit(int64(int64), nopython=True)
 def fib(n):
-    # Explicitly typed: returns int64, takes int64
-    # ...
+    # returns int64, takes int64
 ```
 
-### Integer Overflow
+</details>
 
-Numba uses fixed-size integers (typically int64):
-- F(92) = 7540113804746346429 (fits in int64)
-- F(93) = 12200160415121876738 (overflows int64!)
-
-Our implementation detects this and falls back to Python.
-
-### Caching
+<details>
+<summary>💾 <strong>Caching</strong></summary>
 
 With `cache=True`, compiled code is saved to disk:
+
 ```
-__pycache__/fibonacci.cpython-311.nbc  # Cached compiled code
+__pycache__/fibonacci.cpython-311.nbc
 ```
 
 This eliminates compilation time on subsequent program runs.
 
-## Limitations
+</details>
 
-1. **Integer size**: int64 max, no arbitrary precision
-2. **Compilation time**: First call is slow
-3. **Type constraints**: Must use Numba-supported types
-4. **Feature limitations**: Can't use all Python features
+---
 
-### Unsupported in nopython mode:
-- Arbitrary precision integers
-- Most Python objects
-- Dynamic typing
-- Many standard library functions
+## ⚠️ Limitations
 
-## When to Use
+| Limitation | Impact |
+|------------|--------|
+| 🔢 Integer size | int64 max, no arbitrary precision |
+| ⏱️ Compilation time | First call is slow |
+| 📝 Type constraints | Must use Numba-supported types |
+| 🚫 Feature limits | Can't use all Python features |
 
-**Use this technique when:**
-- Maximum speed is required
-- Computing many Fibonacci numbers sequentially
-- n is bounded (≤ 92 for int64)
-- Already using Numba in your project
+---
 
-**Don't use when:**
-- Need arbitrary precision (large n)
-- Startup time is critical (compilation overhead)
-- Minimizing dependencies
-- Teaching basic algorithms (adds complexity)
+## ✅ When to Use
 
-## Comparison with Other Compiled Approaches
+```mermaid
+flowchart TD
+    A{Use Numba JIT?} -->|Yes| B["✅ Maximum speed required"]
+    A -->|Yes| C["✅ Many sequential computations"]
+    A -->|Yes| D["✅ n bounded ≤ 92"]
+    A -->|No| E["❌ Need arbitrary precision"]
+    A -->|No| F["❌ Startup time critical"]
+    A -->|No| G["❌ Minimizing dependencies"]
+
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#27ae60,stroke:#1e8449,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,color:#fff
+```
+
+---
+
+## 📊 Comparison with Other Compiled Approaches
 
 | Approach | Compilation | Ease of Use | Speed | Portability |
-|----------|-------------|-------------|-------|-------------|
-| Numba | JIT | Easy (decorator) | Very fast | Good |
-| Cython | AOT | Moderate | Fast | Requires compilation |
-| PyPy | JIT (interpreter) | Transparent | Fast | Separate interpreter |
-| C Extension | AOT | Difficult | Very fast | Requires C knowledge |
+|----------|:-----------:|:-----------:|:-----:|:-----------:|
+| ⚡ Numba | JIT | Easy | Very fast | Good |
+| 🚀 Cython | AOT | Moderate | Fast | Requires compilation |
+| 🐍 PyPy | JIT | Transparent | Fast | Separate interpreter |
+| ⚙️ C Extension | AOT | Difficult | Very fast | Requires C |
 
-## Advanced Usage
+---
 
-### Parallel Fibonacci (educational only)
+## 📚 References
 
-```python
-from numba import jit, prange
+| # | Citation | Topic |
+|:-:|----------|-------|
+| 1 | **Lam, S.K., et al.** (2015). "Numba: A LLVM-based Python JIT Compiler". *LLVM-HPC Workshop*. | Numba paper |
+| 2 | Numba Documentation. https://numba.pydata.org/ | Official docs |
+| 3 | LLVM Project. https://llvm.org/ | Compiler infrastructure |
 
-@jit(nopython=True, parallel=True)
-def fib_sequence(max_n):
-    """Compute F(0) to F(max_n) in parallel."""
-    result = np.zeros(max_n + 1, dtype=np.int64)
-    result[1] = 1
-    # Note: This doesn't parallelize well due to dependencies
-    for i in prange(2, max_n + 1):
-        result[i] = result[i-1] + result[i-2]
-    return result
-```
+---
 
-### CUDA GPU (for matrix operations)
-
-```python
-from numba import cuda
-
-@cuda.jit
-def matrix_mult_gpu(A, B, C):
-    # GPU-accelerated matrix multiplication
-    # (Useful for batch Fibonacci via matrix method)
-    pass
-```
-
-## References
-
-1. Lam, S.K., Pitrou, A., & Seibert, S. (2015). "Numba: A LLVM-based Python JIT Compiler". *Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC*.
-
-2. Numba Documentation. https://numba.pydata.org/
-
-3. LLVM Project. https://llvm.org/
-
-4. Lattner, C., & Adve, V. (2004). "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation". *CGO '04*.
-
-## Example
+## 💻 Example Usage
 
 ```python
 from techniques.08_numba_jit.fibonacci import NumbaJIT
@@ -214,13 +233,19 @@ print(technique.calculate(92))   # 7540113804746346429 (max for int64)
 # Falls back to Python for large n
 print(technique.calculate(100))  # 354224848179261915075
 
-# Benchmark comparison
+# Benchmark
 import time
-
-# Numba (after warmup)
 start = time.perf_counter()
 for i in range(100000):
     technique.calculate(50)
 numba_time = time.perf_counter() - start
 print(f"Numba: {numba_time:.3f}s for 100k calls")
 ```
+
+---
+
+<div align="center">
+
+[← Back to Main README](../../README.md)
+
+</div>

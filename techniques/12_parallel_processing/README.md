@@ -1,12 +1,24 @@
-# Parallel Processing
+<div align="center">
 
-## Overview
+# 🔀 Parallel Processing
 
-This technique demonstrates parallel computation using Python's multiprocessing module. While Fibonacci's inherently sequential nature limits parallelization benefits for single computations, parallel processing excels at computing multiple independent Fibonacci numbers simultaneously.
+**Leveraging Multiple CPU Cores for Batch Fibonacci Computation**
 
-## Algorithm Description
+[← Back to Techniques](../../README.md#-implemented-techniques)
 
-The core algorithm is the standard iterative approach, but executed across multiple processes:
+</div>
+
+---
+
+## 🏃 Overview
+
+This technique demonstrates parallel computation using Python's **multiprocessing module**. While Fibonacci's inherently sequential nature limits parallelization benefits for single computations, parallel processing **excels at computing multiple independent Fibonacci numbers simultaneously**.
+
+**Key concept:** Trade process startup overhead for throughput gains when computing many values.
+
+## 🔍 Algorithm Description
+
+The core algorithm is the **standard iterative approach**, but executed across multiple processes for parallelism:
 
 ```python
 from concurrent.futures import ProcessPoolExecutor
@@ -42,49 +54,55 @@ For computing a single F(n), almost everything is serial (S ≈ 1), so paralleli
 
 For computing F(n₁), F(n₂), ..., F(nₖ) independently, P ≈ 1, so we get near-linear speedup!
 
-## Complexity Analysis
+## 📊 Complexity Analysis
 
 ### Single Computation
 
-- **Time**: O(n) - same as iterative
-- **Space**: O(1) auxiliary
+| Metric | Complexity | Notes |
+|--------|-----------|-------|
+| **Time** | O(n) | Same as iterative |
+| **Space** | O(1) | Auxiliary space only |
+| **Process Overhead** | ~50-100ms | Usually exceeds computation! |
 
 ### Batch Computation (k numbers, p processes)
 
-- **Time**: O(max(n₁...nₖ) × k/p) - work divided among processes
-- **Space**: O(k) for results + process overhead
+| Metric | Complexity | Notes |
+|--------|-----------|-------|
+| **Time** | O(max(n₁...nₖ) × k/p) | Work divided among processes |
+| **Space** | O(k) + overhead | Results + process communication |
+| **Speedup** | Up to **p×** | Limited by Amdahl's Law |
 
 ### Speedup Characteristics
 
-| Scenario | Speedup |
-|----------|---------|
-| Single F(n) | ~1x (no benefit) |
-| k independent F(nᵢ), p cores | Up to px |
-| F(0) to F(n) sequentially | ~1x (dependencies) |
+| Scenario | Speedup | Notes |
+|----------|---------|-------|
+| Single F(n) | ~1x | Process startup overhead kills benefit |
+| k independent F(nᵢ), p cores | Up to **p×** | Excellent scalability with many values |
+| F(0) to F(n) sequential | ~1x | Dependencies prevent parallelization |
 
-## Performance Characteristics
+## ⚡ Performance Characteristics
 
 ### Single Value (No Parallelization Benefit)
 
-| n | Sequential | Parallel Overhead |
-|---|------------|-------------------|
-| 100 | < 1ms | Process startup: ~50ms |
-| 1,000 | ~1ms | Not worth it |
-| 10,000 | ~10ms | Maybe worth it |
+| n | Sequential | Parallel Overhead | Verdict |
+|---|------------|-------------------|----------|
+| 100 | < 1ms | Process startup: ~50ms | ❌ Don't parallelize |
+| 1,000 | ~1ms | ~50ms overhead | ❌ Not worth it |
+| 10,000 | ~10ms | ~50ms overhead | ⚠️ Maybe worth it |
 
 ### Batch Computation (4 cores)
 
-| Batch Size | Sequential | 4-Process Parallel | Speedup |
-|------------|------------|-------------------|---------|
-| 100 × F(1000) | ~100ms | ~30ms | ~3.3x |
-| 1000 × F(1000) | ~1s | ~300ms | ~3.3x |
-| 10000 × F(100) | ~500ms | ~150ms | ~3.3x |
+| Batch Size | Sequential | 4-Process Parallel | Speedup | Verdict |
+|------------|------------|-------------------|---------|----------|
+| 100 × F(1000) | ~100ms | ~30ms | **3.3×** | ✅ Good |
+| 1000 × F(1000) | ~1s | ~300ms | **3.3×** | ✅ Excellent |
+| 10000 × F(100) | ~500ms | ~150ms | **3.3×** | ✅ Excellent |
 
-**In our 1-second benchmark**: Parallel processing has significant overhead, so it's typically slower than simple iteration for sequential F(0), F(1), F(2), ... computation.
+**🏆 In our 1-second benchmark**: Parallel processing has **significant startup overhead**, so it's typically **slower** than simple iteration for sequential F(0), F(1), F(2), ... computation.
 
-## Python Parallel Processing
+## 🐍 Python Parallel Processing
 
-### The GIL Problem
+### The GIL (Global Interpreter Lock) Problem
 
 Python's Global Interpreter Lock (GIL) prevents true parallel execution of Python bytecode in threads. Solutions:
 
@@ -92,7 +110,7 @@ Python's Global Interpreter Lock (GIL) prevents true parallel execution of Pytho
 2. **C Extensions**: Release GIL during computation
 3. **Numba/Cython**: Compiled code can release GIL
 
-### ProcessPoolExecutor
+### 🔧 ProcessPoolExecutor
 
 ```python
 from concurrent.futures import ProcessPoolExecutor
@@ -107,7 +125,7 @@ with ProcessPoolExecutor() as executor:
     results = [f.result() for f in futures]
 ```
 
-### ThreadPoolExecutor (for I/O)
+### 📧 ThreadPoolExecutor (for I/O-bound tasks)
 
 ```python
 from concurrent.futures import ThreadPoolExecutor
@@ -117,7 +135,7 @@ with ThreadPoolExecutor(max_workers=4) as executor:
     results = list(executor.map(fib_single, range(100)))
 ```
 
-### multiprocessing.Pool
+### 🏊 multiprocessing.Pool
 
 ```python
 from multiprocessing import Pool
@@ -168,21 +186,23 @@ Processes don't share memory. For large inputs/outputs:
 - Use memory-mapped files
 - Minimize data transfer
 
-## When to Use
+## ✅ When to Use
 
-**Use parallel processing when:**
-- Computing many independent Fibonacci numbers
-- Tasks are CPU-intensive enough to justify overhead
-- You have multiple CPU cores
-- Teaching parallel computing concepts
+### ✓ Use When
+- Computing **many independent Fibonacci numbers** (100+)
+- Tasks are **CPU-intensive enough to justify overhead**
+- You have **multiple CPU cores** available
+- Teaching **parallel computing concepts and limitations**
+- Batch processing is your workload pattern
 
-**Don't use when:**
-- Computing single Fibonacci numbers
-- Computing sequential F(0)...F(n)
+### ✗ Don't Use When
+- Computing **single Fibonacci numbers** (use iterative instead)
+- Computing **sequential F(0)...F(n)** (dependencies)
 - Startup overhead exceeds computation time
 - Memory is very limited
+- Real-time guarantees are needed
 
-## Alternative Parallel Approaches
+## 🚀 Alternative Parallel Approaches
 
 ### NumPy (Implicit SIMD)
 
@@ -220,7 +240,7 @@ import dask.array as da
 # (overkill for Fibonacci)
 ```
 
-## Educational Value
+## 🎓 Educational Value
 
 This technique teaches:
 
@@ -230,17 +250,14 @@ This technique teaches:
 4. **Overhead Analysis**: When parallel isn't faster
 5. **Batch Processing**: Effective parallelization patterns
 
-## References
+## 📚 References
 
-1. Python Documentation. "multiprocessing — Process-based parallelism". https://docs.python.org/3/library/multiprocessing.html
+1. **Python Documentation.** "multiprocessing — Process-based parallelism". https://docs.python.org/3/library/multiprocessing.html
+2. **Python Documentation.** "concurrent.futures — Launching parallel tasks". https://docs.python.org/3/library/concurrent.futures.html
+3. **Amdahl, G.M.** (1967). "Validity of the single processor approach to achieving large scale computing capabilities". *AFIPS Conference Proceedings*.
+4. **Beazley, D.** (2010). "Understanding the Python GIL". PyCon 2010. https://www.dabeaz.com/GIL/
 
-2. Python Documentation. "concurrent.futures — Launching parallel tasks". https://docs.python.org/3/library/concurrent.futures.html
-
-3. Amdahl, G.M. (1967). "Validity of the single processor approach to achieving large scale computing capabilities". *AFIPS Conference Proceedings*.
-
-4. Beazley, D. (2010). "Understanding the Python GIL". PyCon 2010. https://www.dabeaz.com/GIL/
-
-## Example
+## 💡 Example Usage
 
 ```python
 from techniques.12_parallel_processing.fibonacci import ParallelProcessing

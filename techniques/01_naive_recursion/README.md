@@ -1,20 +1,50 @@
-# Naive Recursion
+<div align="center">
 
-## Overview
+# 🐢 Naive Recursion
 
-The naive recursive implementation is the most straightforward translation of the mathematical definition of the Fibonacci sequence into code. While elegant and easy to understand, it serves as an important pedagogical example of why algorithmic efficiency matters.
+[![Complexity](https://img.shields.io/badge/Time-O(2^n)-red?style=flat-square)]()
+[![Space](https://img.shields.io/badge/Space-O(n)-yellow?style=flat-square)]()
+[![Type](https://img.shields.io/badge/Type-Recursive-blue?style=flat-square)]()
+[![Educational](https://img.shields.io/badge/Purpose-Educational-green?style=flat-square)]()
 
-## Algorithm Description
+*The classic recursive implementation — elegant but exponentially slow*
 
-The Fibonacci sequence is defined mathematically as:
+</div>
 
+---
+
+## 📖 Overview
+
+The naive recursive implementation directly mirrors the mathematical definition of the Fibonacci sequence. While elegant and easy to understand, it serves as a crucial pedagogical example of why **algorithmic efficiency matters**.
+
+> [!WARNING]
+> This is the **slowest** technique in our benchmark. Use it only for educational purposes!
+
+---
+
+## 🔢 Algorithm Description
+
+### Mathematical Definition
+
+```mermaid
+flowchart LR
+    subgraph Base["📌 Base Cases"]
+        A["F(0) = 0"]
+        B["F(1) = 1"]
+    end
+
+    subgraph Recurrence["🔄 Recurrence"]
+        C["F(n) = F(n-1) + F(n-2)"]
+    end
+
+    A --> C
+    B --> C
+
+    style Base fill:#3498db,stroke:#2980b9,color:#fff
+    style Recurrence fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
-F(0) = 0
-F(1) = 1
-F(n) = F(n-1) + F(n-2)  for n > 1
-```
 
-The naive recursive implementation directly mirrors this definition:
+### Python Implementation
 
 ```python
 def fibonacci(n):
@@ -23,7 +53,8 @@ def fibonacci(n):
     return fibonacci(n - 1) + fibonacci(n - 2)
 ```
 
-### Pseudocode
+<details>
+<summary>📋 <strong>Pseudocode</strong></summary>
 
 ```
 FUNCTION fibonacci(n):
@@ -34,49 +65,72 @@ FUNCTION fibonacci(n):
     RETURN fibonacci(n - 1) + fibonacci(n - 2)
 ```
 
-## Complexity Analysis
+</details>
 
-### Time Complexity: O(2^n)
+---
 
-The time complexity is exponential because each call branches into two more calls. The recurrence relation for the number of operations T(n) is:
+## 📊 Complexity Analysis
 
-```
-T(n) = T(n-1) + T(n-2) + O(1)
-```
+### ⏱️ Time Complexity: `O(2^n)`
 
-This is the same recurrence as the Fibonacci sequence itself! Solving this:
+```mermaid
+graph TD
+    A["F(5)"] --> B["F(4)"]
+    A --> C["F(3)"]
+    B --> D["F(3)"]
+    B --> E["F(2)"]
+    C --> F["F(2)"]
+    C --> G["F(1)"]
+    D --> H["F(2)"]
+    D --> I["F(1)"]
 
-```
-T(n) ≈ O(φ^n)
-```
-
-Where φ (phi) is the golden ratio ≈ 1.618. Since φ^n < 2^n, we often simplify to O(2^n).
-
-**Call Tree Visualization for F(5):**
-
-```
-                    F(5)
-                   /    \
-               F(4)      F(3)
-              /    \     /    \
-           F(3)   F(2)  F(2)  F(1)
-          /   \   /  \   /  \
-       F(2) F(1) F(1) F(0) F(1) F(0)
-       /  \
-    F(1) F(0)
+    style A fill:#e74c3c,stroke:#c0392b,color:#fff
+    style B fill:#e74c3c,stroke:#c0392b,color:#fff
+    style C fill:#3498db,stroke:#2980b9,color:#fff
+    style D fill:#3498db,stroke:#2980b9,color:#fff
 ```
 
-Notice how F(3) is calculated twice, F(2) three times, etc. This redundancy is the source of inefficiency.
+The time complexity is **exponential** because each call branches into two more calls:
 
-### Space Complexity: O(n)
+```
+T(n) = T(n-1) + T(n-2) + O(1) ≈ O(φ^n) ≈ O(2^n)
+```
 
-The space complexity is O(n) due to the maximum depth of the call stack. At any point, the deepest recursion will be n levels deep (when following the F(n-1) chain to F(0)).
+Where **φ (phi)** is the golden ratio ≈ 1.618.
 
-## Mathematical Background
+> [!NOTE]
+> Notice how F(3) is calculated twice, F(2) three times, etc. This redundancy causes exponential growth!
 
-### The Golden Ratio Connection
+### 💾 Space Complexity: `O(n)`
 
-The Fibonacci sequence has a deep connection to the golden ratio φ = (1 + √5) / 2 ≈ 1.618034.
+The space complexity is O(n) due to the maximum depth of the call stack.
+
+---
+
+## 📈 Performance Characteristics
+
+| n | Function Calls | Approximate Time |
+|:-:|---------------:|:----------------:|
+| 10 | 177 | < 1ms |
+| 20 | 21,891 | ~10ms |
+| 30 | 2,692,537 | ~1s |
+| 35 | 29,860,703 | ~10s |
+| 40 | 331,160,281 | ~2min |
+| 45 | 3,672,623,805 | ~20min |
+
+> [!TIP]
+> In our **1-second benchmark**, this technique typically calculates only F(0) through F(30-35).
+
+---
+
+## 🔬 Mathematical Background
+
+<details>
+<summary>✨ <strong>The Golden Ratio Connection</strong></summary>
+
+The Fibonacci sequence has a deep connection to the golden ratio:
+
+$$φ = \frac{1 + \sqrt{5}}{2} ≈ 1.618034$$
 
 The ratio of consecutive Fibonacci numbers approaches φ:
 
@@ -86,67 +140,66 @@ lim(n→∞) F(n+1)/F(n) = φ
 
 This relationship is why the time complexity can be expressed as O(φ^n).
 
-### Recurrence Relations
+</details>
 
-The Fibonacci recurrence F(n) = F(n-1) + F(n-2) is a linear homogeneous recurrence relation with constant coefficients. Its characteristic equation is:
+<details>
+<summary>📐 <strong>Characteristic Equation</strong></summary>
+
+The Fibonacci recurrence has characteristic equation:
 
 ```
 x² = x + 1
 x² - x - 1 = 0
 ```
 
-Solving gives roots x = φ and x = ψ (where ψ = (1-√5)/2 ≈ -0.618), which leads to Binet's formula.
+Solving gives roots x = φ and x = ψ (where ψ ≈ -0.618), leading to Binet's formula.
 
-## Performance Characteristics
+</details>
 
-| n | Approximate Function Calls | Time (typical) |
-|---|---------------------------|----------------|
-| 10 | 177 | < 1ms |
-| 20 | 21,891 | ~10ms |
-| 30 | 2,692,537 | ~1s |
-| 35 | 29,860,703 | ~10s |
-| 40 | 331,160,281 | ~2min |
-| 45 | 3,672,623,805 | ~20min |
+---
 
-**In our 1-second benchmark, this technique typically calculates F(0) through F(30-35).**
+## 🐍 Python-Specific Considerations
 
-## Implementation Details
+| Consideration | Impact |
+|---------------|--------|
+| 🔢 Recursion Limit | Default ~1000 (not reached due to time constraints) |
+| 📞 Function Call Overhead | Makes Python slower than compiled languages |
+| 🚫 No Tail Call Optimization | Full call stack is maintained |
 
-### Python-Specific Considerations
+---
 
-1. **Recursion Limit**: Python has a default recursion limit (~1000). While naive recursion won't reach this limit due to time constraints, deeper recursive techniques need to handle this.
+## ✅ When to Use
 
-2. **Function Call Overhead**: Python's function call overhead makes this even slower compared to compiled languages.
+```mermaid
+flowchart TD
+    A{Use Naive Recursion?} -->|Yes| B["✅ Educational purposes"]
+    A -->|Yes| C["✅ Demonstrating optimization importance"]
+    A -->|Yes| D["✅ Very small n < 25"]
+    A -->|No| E["❌ Any n > 30"]
+    A -->|No| F["❌ Performance-critical code"]
+    A -->|No| G["❌ Production systems"]
 
-3. **No Tail Call Optimization**: Python doesn't optimize tail recursion, so the full call stack is maintained.
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#27ae60,stroke:#1e8449,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,color:#fff
+```
 
-### Edge Cases
+---
 
-- F(0) = 0
-- F(1) = 1
-- Negative n: Should raise ValueError
+## 📚 References
 
-## When to Use
+| # | Citation | Topic |
+|:-:|----------|-------|
+| 1 | **Cormen, T.H., et al.** (2009). *Introduction to Algorithms* (3rd ed.). MIT Press. Chapter 15. | Dynamic Programming |
+| 2 | **Knuth, D.E.** (1997). *The Art of Computer Programming, Vol. 1* (3rd ed.). Section 1.2.8. | Fundamental Algorithms |
+| 3 | **Graham, R.L., Knuth, D.E., & Patashnik, O.** (1994). *Concrete Mathematics* (2nd ed.). Chapter 6. | Mathematical Analysis |
 
-**Use this technique for:**
-- Educational purposes to understand recursion
-- Demonstrating the importance of algorithm optimization
-- Very small n (n < 25) where simplicity matters more than speed
+---
 
-**Don't use this technique for:**
-- Any practical application requiring n > 30
-- Performance-critical code
-- Production systems
-
-## References
-
-1. Cormen, T.H., Leiserson, C.E., Rivest, R.L., & Stein, C. (2009). *Introduction to Algorithms* (3rd ed.). MIT Press. Chapter 15: Dynamic Programming.
-
-2. Knuth, D.E. (1997). *The Art of Computer Programming, Volume 1: Fundamental Algorithms* (3rd ed.). Addison-Wesley. Section 1.2.8.
-
-3. Graham, R.L., Knuth, D.E., & Patashnik, O. (1994). *Concrete Mathematics: A Foundation for Computer Science* (2nd ed.). Addison-Wesley. Chapter 6.
-
-## Example
+## 💻 Example Usage
 
 ```python
 from techniques.01_naive_recursion.fibonacci import NaiveRecursion
@@ -162,3 +215,11 @@ result = technique.calculate(35)
 elapsed = time.time() - start
 print(f"F(35) = {result}, took {elapsed:.2f}s")
 ```
+
+---
+
+<div align="center">
+
+[← Back to Main README](../../README.md)
+
+</div>

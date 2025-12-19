@@ -1,12 +1,53 @@
-# Cython Optimized
+<div align="center">
 
-## Overview
+# 🚀 Cython Optimized
 
-Cython is a programming language that makes writing C extensions for Python easy. It allows you to write Python-like code with optional static type declarations that compile to highly efficient C code. This technique demonstrates using Cython to achieve C-level performance for Fibonacci calculation.
+[![Complexity](https://img.shields.io/badge/Time-O(n)-yellow?style=flat-square)]()
+[![Space](https://img.shields.io/badge/Space-O(1)-brightgreen?style=flat-square)]()
+[![Type](https://img.shields.io/badge/Type-AOT_Compiled-blue?style=flat-square)]()
+[![Requires](https://img.shields.io/badge/Requires-Cython-FFD43B?style=flat-square)]()
 
-## Algorithm Description
+*C-extension performance with Python-like syntax*
 
-The algorithm is the standard iterative approach, but with Cython's static typing:
+</div>
+
+---
+
+## 📖 Overview
+
+Cython is a programming language that makes writing **C extensions** for Python easy. It allows Python-like code with optional static type declarations that compile to highly efficient C code.
+
+> [!TIP]
+> Cython achieves **10-100x speedup** over pure Python through elimination of interpreter overhead!
+
+---
+
+## 🔢 Algorithm Description
+
+```mermaid
+flowchart LR
+    subgraph Cython["🚀 Cython"]
+        A[".pyx file"]
+        B["cdef types"]
+    end
+
+    subgraph Compile["⚙️ Compilation"]
+        C["C Code"]
+        D[".so/.pyd"]
+    end
+
+    subgraph Speed["📈 Result"]
+        E["10-100x Faster"]
+    end
+
+    Cython --> Compile --> Speed
+
+    style Cython fill:#FFD43B,stroke:#d4af37,color:#000
+    style Compile fill:#3498db,stroke:#2980b9,color:#fff
+    style Speed fill:#27ae60,stroke:#1e8449,color:#fff
+```
+
+### Cython Implementation
 
 ```cython
 cpdef long long fib_cython(int n):
@@ -25,221 +66,156 @@ cpdef long long fib_cython(int n):
     return b
 ```
 
-### Key Cython Features Used
+### Key Cython Features
 
-- `cpdef`: Function callable from Python and C
-- `cdef`: C-level variable declarations
-- `long long`: 64-bit integer type
-- `int`: 32-bit integer type
-- Static loop variable typing
+| Feature | Description |
+|---------|-------------|
+| `cpdef` | Function callable from Python and C |
+| `cdef` | C-level variable declarations |
+| `long long` | 64-bit integer type |
+| `int` | 32-bit integer type |
 
-## Complexity Analysis
+---
 
-### Time Complexity: O(n)
+## 📊 Complexity Analysis
+
+### ⏱️ Time Complexity: `O(n)`
 
 Same algorithm as pure Python, but:
-- Direct C-level integer operations
-- Compiled loop without interpreter overhead
-- Variables stored in CPU registers
 
-### Space Complexity: O(1)
+| Factor | Benefit |
+|--------|---------|
+| Direct C operations | No Python dispatch |
+| Compiled loops | No interpreter |
+| CPU registers | Efficient storage |
+
+### 💾 Space Complexity: `O(1)`
 
 - Three C variables (a, b, temp)
 - No Python object overhead
 
-### Speedup Factors
+---
 
-Cython achieves speedups through:
-1. Elimination of Python's dynamic dispatch
-2. Direct C-level integer operations
-3. Compiled loop statements
-4. Memory-efficient C types
+## 📈 Performance Comparison
 
-Typical speedup: 10-100x over pure Python
+| n | 🐍 Pure Python | 🚀 Cython | Speedup |
+|:-:|:--------------:|:---------:|:-------:|
+| 100 | ~1μs | ~0.05μs | ~20x |
+| 1,000 | ~10μs | ~0.5μs | ~20x |
+| 10,000 | ~100μs | ~5μs | ~20x |
+| 92 (max) | ~10μs | ~0.4μs | ~25x |
 
-## Compilation Process
+> [!NOTE]
+> In our **1-second benchmark**, Cython is among the fastest, computing millions of values for small n.
 
-### Step 1: Write .pyx file
+---
+
+## ⚙️ Compilation Process
+
+```mermaid
+flowchart LR
+    A[".pyx"] --> B["Cython"]
+    B --> C[".c"]
+    C --> D["C Compiler"]
+    D --> E[".so/.pyd"]
+    E --> F["import"]
+
+    style A fill:#FFD43B,stroke:#d4af37,color:#000
+    style E fill:#27ae60,stroke:#1e8449,color:#fff
+```
+
+<details>
+<summary>📋 <strong>Step-by-step</strong></summary>
+
+**Step 1**: Write .pyx file
+
 ```cython
 # fibonacci_impl.pyx
 cpdef long long fib_cython(int n):
     ...
 ```
 
-### Step 2: Create setup.py
+**Step 2**: Create setup.py
+
 ```python
 from setuptools import setup
 from Cython.Build import cythonize
 
-setup(
-    ext_modules=cythonize("fibonacci_impl.pyx")
-)
+setup(ext_modules=cythonize("fibonacci_impl.pyx"))
 ```
 
-### Step 3: Compile
+**Step 3**: Compile
+
 ```bash
 python setup.py build_ext --inplace
 ```
 
-This produces: `fibonacci_impl.cpython-311-x86_64-linux-gnu.so`
+**Step 4**: Use
 
-### Step 4: Import and use
 ```python
 from fibonacci_impl import fib_cython
 print(fib_cython(50))  # 12586269025
 ```
 
-## Performance Characteristics
+</details>
 
-| n | Pure Python | Cython | Speedup |
-|---|-------------|--------|---------|
-| 100 | ~1μs | ~0.05μs | ~20x |
-| 1,000 | ~10μs | ~0.5μs | ~20x |
-| 10,000 | ~100μs | ~5μs | ~20x |
-| 92 (max) | ~10μs | ~0.4μs | ~25x |
+---
 
-**In our 1-second benchmark**: Cython will be among the fastest, computing millions of values for small n.
+## ⚠️ Limitations
 
-## Implementation Details
+| Limitation | Impact |
+|------------|--------|
+| 📦 Compilation required | Must compile before use |
+| 💻 Platform-specific | Binaries are OS/CPU specific |
+| 🔢 Integer overflow | long long overflows at F(93) |
+| ♾️ No arbitrary precision | Uses fixed C types |
 
-### Type Declarations
+---
 
-```cython
-# C types for maximum speed
-cdef int i              # 32-bit integer
-cdef long long value    # 64-bit integer
-cdef double x           # 64-bit float
+## ✅ When to Use
 
-# Python objects (slower)
-cdef object py_obj
-cdef list my_list
+```mermaid
+flowchart TD
+    A{Use Cython?} -->|Yes| B["✅ Maximum performance needed"]
+    A -->|Yes| C["✅ Compilation acceptable"]
+    A -->|Yes| D["✅ Distributing binary packages"]
+    A -->|No| E["❌ Need arbitrary precision"]
+    A -->|No| F["❌ Can't compile"]
+    A -->|No| G["❌ Pure Python required"]
+
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#27ae60,stroke:#1e8449,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
 
-### Compiler Directives
+---
 
-```cython
-# cython: language_level=3
-# cython: boundscheck=False    # Disable array bounds checking
-# cython: wraparound=False     # Disable negative indexing
-# cython: cdivision=True       # Use C division semantics
-```
+## 📊 Comparison with Alternatives
 
-### Function Types
-
-```cython
-# def: Python function (slowest)
-def py_func(n):
-    pass
-
-# cdef: C function (not callable from Python)
-cdef long long c_func(int n):
-    pass
-
-# cpdef: Hybrid (callable from both)
-cpdef long long hybrid_func(int n):
-    pass
-```
-
-### Memory Views (for arrays)
-
-```cython
-def process_array(double[:] arr):
-    cdef int i
-    cdef double total = 0
-    for i in range(arr.shape[0]):
-        total += arr[i]
-    return total
-```
-
-## Limitations
-
-1. **Compilation required**: Must compile before use
-2. **Platform-specific**: Compiled binaries are OS/CPU specific
-3. **Integer overflow**: long long overflows at F(93)
-4. **No arbitrary precision**: Uses fixed C types
-
-### Overflow Handling
-
-```python
-if CYTHON_AVAILABLE and n <= 92:
-    return fib_cython(n)  # Fast path
-else:
-    return python_fallback(n)  # Arbitrary precision
-```
-
-## When to Use
-
-**Use this technique when:**
-- Maximum single-threaded performance is needed
-- Compilation is acceptable
-- Distributing binary packages
-- Already using Cython in project
-
-**Don't use when:**
-- Need arbitrary precision integers
-- Can't compile (restricted environment)
-- Cross-platform pure Python required
-- Development iteration speed is priority
-
-## Comparison with Alternatives
-
-| Aspect | Cython | Numba | PyPy | Pure Python |
-|--------|--------|-------|------|-------------|
-| Compilation | AOT (.pyx → .so) | JIT | JIT | None |
-| Startup time | Fast (pre-compiled) | Slow (first call) | Fast | Fast |
-| Dependencies | Cython, C compiler | LLVM | None | None |
+| Aspect | 🚀 Cython | ⚡ Numba | 🐍 PyPy | Pure Python |
+|--------|:---------:|:-------:|:------:|:-----------:|
+| Compilation | AOT | JIT | JIT | None |
+| Startup time | Fast | Slow | Fast | Fast |
+| Dependencies | Cython + C compiler | LLVM | None | None |
 | Ease of use | Moderate | Easy | Easy | Easiest |
 | Performance | Very fast | Very fast | Fast | Slow |
 
-## Advanced Techniques
+---
 
-### Parallel Loops with OpenMP
+## 📚 References
 
-```cython
-from cython.parallel import prange
+| # | Citation | Topic |
+|:-:|----------|-------|
+| 1 | **Behnel, S., et al.** (2011). "Cython: The Best of Both Worlds". *Computing in Science & Engineering*. | Cython paper |
+| 2 | Cython Documentation. https://cython.readthedocs.io/ | Official docs |
+| 3 | **Smith, K.** (2015). *Cython: A Guide for Python Programmers*. O'Reilly. | Comprehensive guide |
 
-cpdef long long[:] fib_array_parallel(int max_n):
-    cdef long long[:] result = np.zeros(max_n + 1, dtype=np.int64)
-    cdef int i
+---
 
-    result[0] = 0
-    result[1] = 1
-
-    # Note: Fibonacci has dependencies, so not actually parallelizable
-    for i in range(2, max_n + 1):
-        result[i] = result[i-1] + result[i-2]
-
-    return result
-```
-
-### Using NumPy with Cython
-
-```cython
-import numpy as np
-cimport numpy as np
-
-cpdef np.ndarray[np.int64_t, ndim=1] fib_numpy_cython(int max_n):
-    cdef np.ndarray[np.int64_t, ndim=1] fib = np.zeros(max_n + 1, dtype=np.int64)
-    cdef int i
-
-    fib[1] = 1
-    for i in range(2, max_n + 1):
-        fib[i] = fib[i-1] + fib[i-2]
-
-    return fib
-```
-
-## References
-
-1. Behnel, S., Bradshaw, R., Citro, C., Dalcin, L., Seljebotn, D.S., & Smith, K. (2011). "Cython: The Best of Both Worlds". *Computing in Science & Engineering*, 13(2), 31-39.
-
-2. Cython Documentation. https://cython.readthedocs.io/
-
-3. Smith, K. (2015). *Cython: A Guide for Python Programmers*. O'Reilly Media.
-
-4. Lanaro, G. (2017). *Python High Performance* (2nd ed.). Packt Publishing. Chapter 3.
-
-## Example
+## 💻 Example Usage
 
 ```python
 from techniques.09_cython_optimized.fibonacci import CythonOptimized
@@ -252,13 +228,12 @@ print(f"Cython compiled: {technique.is_compiled()}")
 # Calculate Fibonacci numbers
 print(technique.calculate(10))   # 55
 print(technique.calculate(50))   # 12586269025
-print(technique.calculate(92))   # 7540113804746346429 (max for long long)
-print(technique.calculate(100))  # Falls back to Python for arbitrary precision
+print(technique.calculate(92))   # 7540113804746346429 (max)
+print(technique.calculate(100))  # Falls back to Python
 
-# Direct usage if compiled
+# Benchmark if compiled
 if technique.is_compiled():
     from techniques.09_cython_optimized.fibonacci_impl import fib_cython
-
     import time
     start = time.perf_counter()
     for i in range(1000000):
@@ -266,3 +241,11 @@ if technique.is_compiled():
     elapsed = time.perf_counter() - start
     print(f"1M calls in {elapsed:.3f}s")
 ```
+
+---
+
+<div align="center">
+
+[← Back to Main README](../../README.md)
+
+</div>

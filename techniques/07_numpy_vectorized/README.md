@@ -1,18 +1,47 @@
-# NumPy Vectorized
+<div align="center">
 
-## Overview
+# 🧊 NumPy Vectorized
 
-This technique leverages NumPy's highly optimized C-level implementations for matrix operations to compute Fibonacci numbers using matrix exponentiation. NumPy is the foundational package for scientific computing in Python.
+[![Complexity](https://img.shields.io/badge/Time-O(log_n)-green?style=flat-square)]()
+[![Space](https://img.shields.io/badge/Space-O(1)-brightgreen?style=flat-square)]()
+[![Type](https://img.shields.io/badge/Type-Scientific-blue?style=flat-square)]()
+[![Requires](https://img.shields.io/badge/Requires-NumPy-013243?style=flat-square&logo=numpy)]()
 
-## Algorithm Description
+*C-level matrix operations with NumPy's optimized BLAS/LAPACK*
 
-Uses the same matrix identity as the pure Python matrix exponentiation, but with NumPy's optimized implementation:
+</div>
 
+---
+
+## 📖 Overview
+
+This technique leverages NumPy's highly optimized C-level implementations for matrix operations to compute Fibonacci numbers using matrix exponentiation. NumPy provides the performance of compiled code with the convenience of Python.
+
+> [!TIP]
+> NumPy is the foundational package for scientific computing in Python, making this a natural choice for numerical applications.
+
+---
+
+## 🔢 Algorithm Description
+
+```mermaid
+flowchart LR
+    subgraph NumPy["🧊 NumPy"]
+        A["np.array([[1,1],[1,0]])"]
+        B["np.linalg.matrix_power"]
+    end
+
+    subgraph Result["📊 Result"]
+        C["F(n) in O(log n)"]
+    end
+
+    NumPy --> Result
+
+    style NumPy fill:#013243,stroke:#0d6e8e,color:#fff
+    style Result fill:#27ae60,stroke:#1e8449,color:#fff
 ```
-| 1  1 |^n
-|      |    contains F(n+1), F(n), F(n-1)
-| 1  0 |
-```
+
+### Python Implementation
 
 ```python
 import numpy as np
@@ -25,144 +54,110 @@ def fibonacci(n):
     return int(result[0, 0])
 ```
 
-### Key NumPy Function
+> `np.linalg.matrix_power(M, n)` efficiently computes M^n using binary exponentiation internally.
 
-`np.linalg.matrix_power(M, n)` efficiently computes M^n using binary exponentiation internally.
+---
 
-## Complexity Analysis
+## 📊 Complexity Analysis
 
-### Time Complexity: O(log n)
+### ⏱️ Time Complexity: `O(log n)`
 
-- `np.linalg.matrix_power` uses binary exponentiation
-- O(log n) 2×2 matrix multiplications
-- Each matrix multiplication is O(1) for fixed size
+| Component | Cost |
+|-----------|------|
+| Binary exponentiation | O(log n) |
+| 2×2 matrix multiplication | O(1) |
+| **Total** | **O(log n)** |
 
-### Space Complexity: O(1)
+### 💾 Space Complexity: `O(1)`
 
 - Fixed-size 2×2 matrices
 - No additional arrays needed
 
-### NumPy Performance
+---
 
-NumPy's C-level implementation offers:
-- Contiguous memory layout for cache efficiency
-- BLAS/LAPACK optimizations (when available)
-- Reduced Python interpreter overhead
+## 📈 Performance Characteristics
 
-## Performance Characteristics
-
-| n | Time (approx) | Notes |
-|---|--------------|-------|
+| n | Time | Notes |
+|:-:|:----:|:------|
 | 100 | < 1ms | Fast |
 | 1,000 | < 1ms | Still fast |
 | 10,000 | ~1ms | Logarithmic |
-| 100,000 | ~10ms | Large number arithmetic dominates |
+| 100,000 | ~10ms | Large integer arithmetic dominates |
 | 1,000,000 | ~500ms | Very large integers |
 
-**In our 1-second benchmark**: NumPy overhead may make it slower than simple iteration for small n, but it excels for larger values.
+> [!NOTE]
+> NumPy overhead may make it slower than simple iteration for small n, but it excels for larger values.
 
-## Implementation Details
+---
+
+## 🐍 Implementation Details
 
 ### Data Types
 
-**Using native types (limited precision):**
+<details>
+<summary>⚠️ <strong>Native types (limited precision)</strong></summary>
+
 ```python
 F = np.array([[1, 1], [1, 0]], dtype=np.int64)
 # Overflow at F(93) = 12200160415121876738 (exceeds int64)
 ```
 
-**Using object dtype (arbitrary precision):**
+</details>
+
+<details>
+<summary>✅ <strong>Object dtype (arbitrary precision)</strong></summary>
+
 ```python
 F = np.array([[1, 1], [1, 0]], dtype=object)
 # Supports Python's arbitrary precision integers
 ```
 
-### Alternative NumPy Approaches
-
-**Iterative with NumPy arrays:**
-```python
-def fib_numpy_iterative(n):
-    fib = np.zeros(n + 1, dtype=object)
-    fib[1] = 1
-    for i in range(2, n + 1):
-        fib[i] = fib[i-1] + fib[i-2]
-    return fib[n]
-```
-
-**Eigenvalue method:**
-```python
-def fib_eigen(n):
-    F = np.array([[1, 1], [1, 0]], dtype=float)
-    eigenvalues, eigenvectors = np.linalg.eig(F)
-    # Reconstruct using eigendecomposition
-    # (Less practical due to precision issues)
-```
+</details>
 
 ### NumPy vs Pure Python
 
-| Aspect | NumPy | Pure Python |
-|--------|-------|-------------|
+| Aspect | 🧊 NumPy | 🐍 Pure Python |
+|--------|:--------:|:--------------:|
 | Setup overhead | Higher | Lower |
 | Small n | Slower | Faster |
 | Large n | Faster | Slower |
 | Dependencies | Requires NumPy | None |
 | Memory layout | Contiguous C array | Python objects |
 
-## When to Use
+---
 
-**Use this technique when:**
-- Already using NumPy in your project
-- Computing Fibonacci in numerical pipelines
-- Need O(log n) complexity
-- Working with batch operations
+## ✅ When to Use
 
-**Don't use when:**
-- Minimizing dependencies
-- Very small n (overhead not worth it)
-- Memory is severely constrained
+```mermaid
+flowchart TD
+    A{Use NumPy Vectorized?} -->|Yes| B["✅ Already using NumPy"]
+    A -->|Yes| C["✅ Numerical pipelines"]
+    A -->|Yes| D["✅ Need O(log n) complexity"]
+    A -->|No| E["❌ Minimizing dependencies"]
+    A -->|No| F["❌ Very small n"]
+    A -->|No| G["❌ Memory constrained"]
 
-## NumPy Best Practices
-
-### Import Conventions
-```python
-import numpy as np  # Standard convention
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#27ae60,stroke:#1e8449,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,color:#fff
 ```
 
-### Array Creation
-```python
-# For Fibonacci with large integers
-F = np.array([[1, 1], [1, 0]], dtype=object)
+---
 
-# For numerical work with bounded values
-F = np.array([[1, 1], [1, 0]], dtype=np.float64)
-```
+## 📚 References
 
-### Batch Operations
-```python
-# Compute multiple Fibonacci numbers efficiently
-def fib_batch(indices):
-    F = np.array([[1, 1], [1, 0]], dtype=object)
-    results = []
-    for n in indices:
-        if n <= 1:
-            results.append(n)
-        else:
-            M = np.linalg.matrix_power(F, n - 1)
-            results.append(int(M[0, 0]))
-    return results
-```
+| # | Citation | Topic |
+|:-:|----------|-------|
+| 1 | **Harris, C.R., et al.** (2020). "Array programming with NumPy". *Nature*, 585, 357-362. | NumPy paper |
+| 2 | NumPy Documentation. "Linear Algebra (numpy.linalg)". | Official docs |
+| 3 | **Van Der Walt, S., et al.** (2011). "The NumPy Array". *Computing in Science & Engineering*. | Array structure |
 
-## References
+---
 
-1. Harris, C.R., Millman, K.J., van der Walt, S.J., et al. (2020). "Array programming with NumPy". *Nature*, 585, 357-362.
-
-2. NumPy Documentation. "Linear Algebra (numpy.linalg)". https://numpy.org/doc/stable/reference/routines.linalg.html
-
-3. Van Der Walt, S., Colbert, S.C., & Varoquaux, G. (2011). "The NumPy Array: A Structure for Efficient Numerical Computation". *Computing in Science & Engineering*, 13(2), 22-30.
-
-4. Oliphant, T.E. (2006). *A Guide to NumPy*. Trelgol Publishing.
-
-## Example
+## 💻 Example Usage
 
 ```python
 from techniques.07_numpy_vectorized.fibonacci import NumpyVectorized
@@ -178,9 +173,13 @@ print(technique.calculate(100))  # 354224848179261915075
 # Direct NumPy usage
 F = np.array([[1, 1], [1, 0]], dtype=object)
 result = np.linalg.matrix_power(F, 99)
-print(result[0, 0])  # F(100) = 354224848179261915075
-
-# Verify against known values
-for n in [10, 20, 30, 40, 50]:
-    print(f"F({n}) = {technique.calculate(n)}")
+print(result[0, 0])  # F(100)
 ```
+
+---
+
+<div align="center">
+
+[← Back to Main README](../../README.md)
+
+</div>

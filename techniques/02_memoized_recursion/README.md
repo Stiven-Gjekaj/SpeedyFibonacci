@@ -1,16 +1,50 @@
-# Memoized Recursion
+<div align="center">
 
-## Overview
+# 💾 Memoized Recursion
 
-Memoization is an optimization technique that stores the results of expensive function calls and returns the cached result when the same inputs occur again. Applied to Fibonacci calculation, it transforms the exponential O(2^n) naive recursion into a linear O(n) algorithm.
+[![Complexity](https://img.shields.io/badge/Time-O(n)-yellow?style=flat-square)]()
+[![Space](https://img.shields.io/badge/Space-O(n)-yellow?style=flat-square)]()
+[![Type](https://img.shields.io/badge/Type-Top--Down_DP-blue?style=flat-square)]()
+[![Cache](https://img.shields.io/badge/Uses-lru__cache-green?style=flat-square)]()
 
-This technique demonstrates "top-down" dynamic programming, where we start with the original problem and recursively break it down while caching intermediate results.
+*Transform exponential to linear with a simple cache*
 
-## Algorithm Description
+</div>
 
-The key insight is that in naive recursion, we calculate the same Fibonacci numbers many times. For example, F(5) requires F(3) twice, F(2) three times, etc.
+---
 
-With memoization, each F(k) is computed exactly once and then retrieved from cache for subsequent calls.
+## 📖 Overview
+
+Memoization stores the results of expensive function calls and returns cached results when the same inputs occur again. Applied to Fibonacci, it transforms the exponential O(2^n) naive recursion into a **linear O(n)** algorithm.
+
+> [!TIP]
+> This technique demonstrates **top-down dynamic programming** — start with the original problem and recursively break it down while caching intermediate results.
+
+---
+
+## 🔢 Algorithm Description
+
+### The Key Insight
+
+```mermaid
+flowchart LR
+    subgraph Before["🐢 Without Memoization"]
+        A1["F(5) called"] --> B1["F(3) calculated 2x"]
+        B1 --> C1["F(2) calculated 3x"]
+        C1 --> D1["O(2^n) calls"]
+    end
+
+    subgraph After["⚡ With Memoization"]
+        A2["F(5) called"] --> B2["F(3) cached after 1st"]
+        B2 --> C2["F(2) cached after 1st"]
+        C2 --> D2["O(n) calls"]
+    end
+
+    style Before fill:#e74c3c,stroke:#c0392b,color:#fff
+    style After fill:#27ae60,stroke:#1e8449,color:#fff
+```
+
+### Python Implementation
 
 ```python
 from functools import lru_cache
@@ -22,7 +56,8 @@ def fibonacci(n):
     return fibonacci(n - 1) + fibonacci(n - 2)
 ```
 
-### Pseudocode
+<details>
+<summary>📋 <strong>Pseudocode</strong></summary>
 
 ```
 INITIALIZE cache as empty dictionary
@@ -40,41 +75,82 @@ FUNCTION fibonacci(n):
     RETURN result
 ```
 
-## Complexity Analysis
+</details>
 
-### Time Complexity: O(n)
+---
 
-Each unique subproblem F(0), F(1), ..., F(n) is solved exactly once:
-- First call to F(k): O(1) work + recursive calls
-- Subsequent calls to F(k): O(1) cache lookup
+## 📊 Complexity Analysis
 
-Total: n+1 unique subproblems × O(1) work each = O(n)
+### ⏱️ Time Complexity: `O(n)`
 
-### Space Complexity: O(n)
+Each unique subproblem F(0), F(1), ..., F(n) is solved **exactly once**:
 
-Two sources of space usage:
-1. **Cache storage**: O(n) entries storing F(0) through F(n)
-2. **Call stack**: O(n) maximum depth for first computation
+| Operation | Cost |
+|-----------|------|
+| First call to F(k) | O(1) work + recursive calls |
+| Subsequent calls to F(k) | O(1) cache lookup |
+| **Total** | **n+1 subproblems × O(1) = O(n)** |
 
-Total: O(n)
+### 💾 Space Complexity: `O(n)`
 
-### Comparison with Naive Recursion
+```mermaid
+flowchart LR
+    subgraph Cache["💾 Cache Storage"]
+        C0["F(0)=0"]
+        C1["F(1)=1"]
+        C2["F(2)=1"]
+        C3["F(3)=2"]
+        CN["...F(n)"]
+    end
 
-| Metric | Naive | Memoized |
-|--------|-------|----------|
+    subgraph Stack["📚 Call Stack"]
+        S1["depth = O(n)"]
+    end
+
+    style Cache fill:#3498db,stroke:#2980b9,color:#fff
+    style Stack fill:#9b59b6,stroke:#8e44ad,color:#fff
+```
+
+---
+
+## 📈 Performance Comparison
+
+| Metric | 🐢 Naive | 💾 Memoized |
+|:------:|:--------:|:-----------:|
 | Time | O(2^n) | O(n) |
 | Space | O(n) | O(n) |
 | F(40) calls | 331M | 41 unique |
+| F(40) time | ~2 min | < 1ms |
 
-## Mathematical Background
+> [!NOTE]
+> In our **1-second benchmark**, this technique typically calculates thousands of Fibonacci numbers!
 
-### Overlapping Subproblems
+---
 
-The Fibonacci problem exhibits "overlapping subproblems" - a key characteristic that makes dynamic programming applicable. The same subproblems are encountered multiple times in different branches of the recursion tree.
+## 📈 Performance Characteristics
+
+| n | Time | Cache Size |
+|:-:|:----:|:----------:|
+| 100 | < 1ms | 101 entries |
+| 1,000 | < 10ms | 1,001 entries |
+| 5,000 | ~50ms | 5,001 entries |
+| 10,000 | ~100ms | 10,001 entries |
+
+> [!WARNING]
+> Python's default recursion limit (~1000) restricts the maximum n. Use iterative methods for very large n.
+
+---
+
+## 🔬 Mathematical Background
+
+<details>
+<summary>🔄 <strong>Overlapping Subproblems</strong></summary>
+
+The Fibonacci problem exhibits "overlapping subproblems" — the same subproblems are encountered multiple times in different branches.
 
 **Subproblem DAG (Directed Acyclic Graph):**
 
-Instead of the exponential tree, memoization converts the computation to a DAG with n+1 nodes:
+Instead of an exponential tree, memoization creates a DAG with n+1 nodes:
 
 ```
 F(5) → F(4) → F(3) → F(2) → F(1)
@@ -82,36 +158,25 @@ F(5) → F(4) → F(3) → F(2) → F(1)
 F(3)   F(2)   F(1)   F(0)
 ```
 
-### Top-Down vs Bottom-Up
+</details>
 
-Memoized recursion is the "top-down" approach to dynamic programming:
-- Start with the main problem F(n)
-- Recursively solve subproblems as needed
-- Cache results to avoid recomputation
+<details>
+<summary>⬆️⬇️ <strong>Top-Down vs Bottom-Up</strong></summary>
 
-Compare with "bottom-up" (iterative DP):
-- Start with base cases F(0), F(1)
-- Build up to F(n) iteratively
-- No recursion overhead
+| Aspect | 💾 Top-Down (Memoization) | 📊 Bottom-Up (Tabulation) |
+|--------|--------------------------|--------------------------|
+| Direction | Large → Small | Small → Large |
+| Recursion | Yes | No |
+| Stack overflow | Possible | No risk |
+| Computes | Only needed subproblems | All subproblems |
 
-## Performance Characteristics
+</details>
 
-| n | Time (approx) | Cache Size |
-|---|--------------|------------|
-| 100 | < 1ms | 101 entries |
-| 1,000 | < 10ms | 1,001 entries |
-| 5,000 | ~50ms | 5,001 entries |
-| 10,000 | ~100ms | 10,001 entries |
+---
 
-**Limitation**: Python's default recursion limit (~1000) restricts the maximum n. Increasing the limit is possible but risks stack overflow.
+## 🐍 Implementation Details
 
-**In our 1-second benchmark, this technique typically calculates thousands of Fibonacci numbers.**
-
-## Implementation Details
-
-### Python's lru_cache
-
-Python's `functools.lru_cache` provides a highly optimized memoization decorator:
+### Python's `lru_cache`
 
 ```python
 from functools import lru_cache
@@ -123,15 +188,14 @@ def fib(n):
     return fib(n-1) + fib(n-2)
 ```
 
-Features:
-- Thread-safe
-- O(1) average lookup/insert
-- Can limit cache size (LRU eviction)
-- Cache statistics available via `.cache_info()`
+| Feature | Description |
+|---------|-------------|
+| 🔒 Thread-safe | Yes |
+| ⚡ Lookup/Insert | O(1) average |
+| 📊 Cache stats | `.cache_info()` |
+| 🔄 Clear cache | `.cache_clear()` |
 
 ### Manual Dictionary Cache
-
-Alternative implementation without decorators:
 
 ```python
 cache = {0: 0, 1: 1}
@@ -144,39 +208,46 @@ def fib(n):
 
 ### Handling Recursion Limit
 
-For large n, increase Python's recursion limit:
-
 ```python
 import sys
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(10000)  # ⚠️ Use with caution
 ```
 
-**Warning**: This risks stack overflow. For very large n, use iterative methods instead.
+---
 
-## When to Use
+## ✅ When to Use
 
-**Use this technique when:**
-- You need the intuitive recursive structure
-- n is moderate (< 1000 typically)
-- Cache memory is not a concern
-- You want to demonstrate dynamic programming concepts
+```mermaid
+flowchart TD
+    A{Use Memoization?} -->|Yes| B["✅ Need recursive structure"]
+    A -->|Yes| C["✅ Moderate n < 1000"]
+    A -->|Yes| D["✅ Teaching DP concepts"]
+    A -->|No| E["❌ Very large n"]
+    A -->|No| F["❌ Memory constrained"]
+    A -->|No| G["❌ Maximum performance needed"]
 
-**Don't use when:**
-- n is very large (use iterative methods)
-- Memory is constrained
-- Maximum performance is required
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#27ae60,stroke:#1e8449,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,color:#fff
+```
 
-## References
+---
 
-1. Michie, D. (1968). "Memo Functions and Machine Learning". *Nature*, 218, 19-22. [Original memoization paper]
+## 📚 References
 
-2. Cormen, T.H., Leiserson, C.E., Rivest, R.L., & Stein, C. (2009). *Introduction to Algorithms* (3rd ed.). MIT Press. Chapter 15: Dynamic Programming.
+| # | Citation | Topic |
+|:-:|----------|-------|
+| 1 | **Michie, D.** (1968). "Memo Functions and Machine Learning". *Nature*, 218, 19-22. | Original memoization |
+| 2 | **Cormen, T.H., et al.** (2009). *Introduction to Algorithms* (3rd ed.). MIT Press. Chapter 15. | Dynamic Programming |
+| 3 | **Bellman, R.** (1957). *Dynamic Programming*. Princeton University Press. | Foundational DP |
+| 4 | Python Documentation. `functools.lru_cache`. | Implementation |
 
-3. Python Documentation. `functools.lru_cache`. https://docs.python.org/3/library/functools.html#functools.lru_cache
+---
 
-4. Bellman, R. (1957). *Dynamic Programming*. Princeton University Press.
-
-## Example
+## 💻 Example Usage
 
 ```python
 from techniques.02_memoized_recursion.fibonacci import MemoizedRecursion
@@ -193,3 +264,11 @@ print(technique.calculate(50))   # 12586269025 (instant)
 print(technique._fib.cache_info())
 # CacheInfo(hits=49, misses=101, maxsize=None, currsize=101)
 ```
+
+---
+
+<div align="center">
+
+[← Back to Main README](../../README.md)
+
+</div>

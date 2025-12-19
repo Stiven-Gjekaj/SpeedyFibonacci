@@ -1,37 +1,73 @@
-# Setup Guide
+<div align="center">
 
-Detailed instructions for setting up SpeedyFibonacci on different platforms.
+# 🔧 Setup Guide
 
-## Requirements
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![Linux](https://img.shields.io/badge/Linux-Supported-FCC624?style=flat-square&logo=linux&logoColor=black)]()
+[![macOS](https://img.shields.io/badge/macOS-Supported-000000?style=flat-square&logo=apple&logoColor=white)]()
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D6?style=flat-square&logo=windows&logoColor=white)]()
 
-- **Python**: 3.11 or higher
-- **Operating Systems**: Linux, macOS, Windows
-- **Optional**: C compiler for Cython (gcc, clang, or MSVC)
+*Detailed installation instructions for SpeedyFibonacci*
 
-## Quick Setup
+</div>
+
+---
+
+## 📖 Table of Contents
+
+- [Requirements](#-requirements)
+- [Quick Setup](#-quick-setup)
+- [Platform-Specific Setup](#-platform-specific-setup)
+- [Virtual Environment Management](#-virtual-environment-management)
+- [Dependency Details](#-dependency-details)
+- [Cython Compilation](#-cython-compilation)
+- [Verification](#-verification)
+- [Troubleshooting](#-troubleshooting)
+
+---
+
+## 📋 Requirements
+
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| ![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white) | ≥3.11 | Required |
+| Operating System | Linux, macOS, Windows | All supported |
+| C Compiler | gcc, clang, or MSVC | Optional (for Cython) |
+
+---
+
+## 🚀 Quick Setup
 
 ```bash
-# 1. Navigate to project directory
+# 1️⃣ Navigate to project directory
 cd SpeedyFibonacci
 
-# 2. Create virtual environment
+# 2️⃣ Create virtual environment
 python3 -m venv venv
 
-# 3. Activate virtual environment
+# 3️⃣ Activate virtual environment
 source venv/bin/activate  # Linux/macOS
 # OR
 venv\Scripts\activate     # Windows
 
-# 4. Install dependencies
+# 4️⃣ Install dependencies
 pip install -r requirements.txt
 
-# 5. Run benchmark
+# 5️⃣ Run benchmark
 python scripts/run_benchmark.py
 ```
 
-## Detailed Setup by Platform
+> [!TIP]
+> That's it! For most users, these 5 steps are all you need.
 
-### Linux (Ubuntu/Debian)
+---
+
+## 💻 Platform-Specific Setup
+
+### 🐧 Linux (Ubuntu/Debian)
+
+<details>
+<summary>📋 <strong>Click to expand</strong></summary>
 
 ```bash
 # Install Python 3.11+ if needed
@@ -54,7 +90,12 @@ pip install Cython
 python scripts/setup_cython.py build_ext --inplace
 ```
 
-### macOS
+</details>
+
+### 🍎 macOS
+
+<details>
+<summary>📋 <strong>Click to expand</strong></summary>
 
 ```bash
 # Install Python via Homebrew (if needed)
@@ -75,7 +116,12 @@ pip install -r requirements.txt
 python scripts/setup_cython.py build_ext --inplace
 ```
 
-### Windows
+</details>
+
+### 🪟 Windows
+
+<details>
+<summary>📋 <strong>Click to expand</strong></summary>
 
 ```powershell
 # Using Python from python.org
@@ -101,16 +147,33 @@ pip install -r requirements.txt
 python scripts/setup_cython.py build_ext --inplace
 ```
 
-## Virtual Environment Management
+</details>
+
+---
+
+## 🔄 Virtual Environment Management
 
 ### Activation Commands
 
+```mermaid
+flowchart TD
+    A{Platform?} -->|Linux/macOS| B["source venv/bin/activate"]
+    A -->|Windows PowerShell| C[".\venv\Scripts\Activate.ps1"]
+    A -->|Windows CMD| D["venv\Scripts\activate.bat"]
+    A -->|Git Bash| E["source venv/Scripts/activate"]
+
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#0078D6,stroke:#005a9e,color:#fff
+    style D fill:#0078D6,stroke:#005a9e,color:#fff
+    style E fill:#f39c12,stroke:#d35400,color:#fff
+```
+
 | Platform | Command |
 |----------|---------|
-| Linux/macOS | `source venv/bin/activate` |
-| Windows (PowerShell) | `.\venv\Scripts\Activate.ps1` |
-| Windows (cmd) | `venv\Scripts\activate.bat` |
-| Windows (Git Bash) | `source venv/Scripts/activate` |
+| 🐧 Linux/macOS | `source venv/bin/activate` |
+| 🪟 Windows (PowerShell) | `.\venv\Scripts\Activate.ps1` |
+| 🪟 Windows (cmd) | `venv\Scripts\activate.bat` |
+| 🐧 Windows (Git Bash) | `source venv/Scripts/activate` |
 
 ### Deactivation
 
@@ -129,19 +192,21 @@ rm -rf venv        # Linux/macOS
 rmdir /s /q venv   # Windows
 ```
 
-## Dependency Details
+---
+
+## 📦 Dependency Details
 
 ### Core Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| numpy | ≥1.24.0 | NumPy vectorized technique |
-| numba | ≥0.57.0 | JIT compilation |
-| Cython | ≥3.0.0 | C extension compilation |
-| matplotlib | ≥3.7.0 | Visualization plots |
-| tabulate | ≥0.9.0 | Console table formatting |
-| pandas | ≥2.0.0 | Data handling |
-| rich | ≥13.0.0 | Colored console output |
+| Package | Version | Purpose | Required |
+|---------|---------|---------|:--------:|
+| ![NumPy](https://img.shields.io/badge/numpy-1.24+-013243?logo=numpy) | ≥1.24.0 | NumPy vectorized technique | ✅ |
+| ![Numba](https://img.shields.io/badge/numba-0.57+-00A3E0) | ≥0.57.0 | JIT compilation | ✅ |
+| ![Cython](https://img.shields.io/badge/Cython-3.0+-yellow) | ≥3.0.0 | C extension compilation | ✅ |
+| ![Matplotlib](https://img.shields.io/badge/matplotlib-3.7+-11557c) | ≥3.7.0 | Visualization plots | ✅ |
+| ![tabulate](https://img.shields.io/badge/tabulate-0.9+-blue) | ≥0.9.0 | Console table formatting | ✅ |
+| ![Pandas](https://img.shields.io/badge/pandas-2.0+-150458?logo=pandas) | ≥2.0.0 | Data handling | ✅ |
+| ![Rich](https://img.shields.io/badge/rich-13.0+-purple) | ≥13.0.0 | Colored console output | ✅ |
 
 ### Development Dependencies
 
@@ -157,14 +222,29 @@ pip install -r requirements-dev.txt
 | mypy | Type checking |
 | flake8 | Linting |
 
-## Cython Compilation
+---
+
+## 🔨 Cython Compilation
 
 ### Why Compile Cython?
 
-The Cython technique has a pure Python fallback, but compiling provides:
-- 10-100x speedup over Python
-- Near-C performance
-- Demonstrates compiled extension benefits
+```mermaid
+graph LR
+    A["Python Code"] --> B["Cython (.pyx)"]
+    B --> C["C Code"]
+    C --> D["Compiled Binary (.so/.pyd)"]
+    D --> E["10-100x Faster!"]
+
+    style A fill:#3498db,stroke:#2980b9,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+```
+
+| Feature | Pure Python | Compiled Cython |
+|---------|:-----------:|:---------------:|
+| Speed | 1x | 10-100x |
+| C-level operations | ❌ | ✅ |
+| Static typing | ❌ | ✅ |
 
 ### Compilation Steps
 
@@ -183,13 +263,15 @@ python -c "from techniques.09_cython_optimized.fibonacci_impl import fib_cython;
 ### Compilation Output
 
 Successfully compiled, you'll see:
-```
-techniques/09_cython_optimized/fibonacci_impl.cpython-311-x86_64-linux-gnu.so
-```
 
-(File extension varies by platform)
+| Platform | Output File |
+|----------|------------|
+| 🐧 Linux | `fibonacci_impl.cpython-311-x86_64-linux-gnu.so` |
+| 🍎 macOS | `fibonacci_impl.cpython-311-darwin.so` |
+| 🪟 Windows | `fibonacci_impl.cpython-311-win_amd64.pyd` |
 
-### Troubleshooting Compilation
+<details>
+<summary>⚠️ <strong>Troubleshooting Compilation</strong></summary>
 
 **Error: "Unable to find vcvarsall.bat" (Windows)**
 - Install Visual Studio Build Tools
@@ -205,21 +287,11 @@ sudo apt install build-essential
 xcode-select --install
 ```
 
-## Numba Notes
+</details>
 
-Numba requires LLVM and may take time on first run:
+---
 
-1. **First call compilation**: ~1-2 seconds
-2. **Subsequent calls**: Near-instant (cached)
-
-If you see warnings about LLVM, ensure numba is properly installed:
-
-```bash
-pip install --upgrade numba
-python -c "import numba; print(numba.__version__)"
-```
-
-## Verification
+## ✅ Verification
 
 After setup, verify everything works:
 
@@ -234,8 +306,9 @@ python scripts/run_benchmark.py --duration 0.5
 python scripts/run_benchmark.py --list
 ```
 
-Expected output:
-```
+### Expected Output
+
+```text
 Available Fibonacci techniques:
 ----------------------------------------
  1. Naive Recursion
@@ -246,9 +319,14 @@ Available Fibonacci techniques:
     ...
 ```
 
-## Common Issues
+---
 
-### "Module not found" errors
+## 🔧 Troubleshooting
+
+### Common Issues
+
+<details>
+<summary>❌ <strong>"Module not found" errors</strong></summary>
 
 ```bash
 # Ensure you're in the project root
@@ -261,7 +339,10 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Matplotlib display issues (headless server)
+</details>
+
+<details>
+<summary>❌ <strong>Matplotlib display issues (headless server)</strong></summary>
 
 ```bash
 # Use non-interactive backend
@@ -269,13 +350,19 @@ export MPLBACKEND=Agg
 python scripts/run_benchmark.py
 ```
 
-### Permission denied (scripts)
+</details>
+
+<details>
+<summary>❌ <strong>Permission denied (scripts)</strong></summary>
 
 ```bash
 chmod +x scripts/*.py
 ```
 
-### Python version mismatch
+</details>
+
+<details>
+<summary>❌ <strong>Python version mismatch</strong></summary>
 
 ```bash
 # Check version
@@ -286,7 +373,25 @@ python --version
 /usr/bin/python3.11 -m venv venv
 ```
 
-## IDE Setup
+</details>
+
+<details>
+<summary>❌ <strong>Numba warnings or errors</strong></summary>
+
+```bash
+# Reinstall numba
+pip uninstall numba llvmlite
+pip install numba
+
+# Verify installation
+python -c "import numba; print(numba.__version__)"
+```
+
+</details>
+
+---
+
+## 🖥️ IDE Setup
 
 ### VS Code
 
@@ -300,7 +405,9 @@ python --version
 2. Configure interpreter: `venv/bin/python`
 3. Mark `techniques/`, `benchmarking/`, etc. as source roots
 
-## Updating Dependencies
+---
+
+## 🔄 Updating Dependencies
 
 ```bash
 # Update all packages
@@ -308,9 +415,14 @@ pip install --upgrade -r requirements.txt
 
 # Update specific package
 pip install --upgrade numpy
+
+# Check for outdated packages
+pip list --outdated
 ```
 
-## Cleanup
+---
+
+## 🧹 Cleanup
 
 ```bash
 # Remove generated files
@@ -320,3 +432,14 @@ python scripts/clean.py --all
 deactivate
 rm -rf venv
 ```
+
+---
+
+<div align="center">
+
+> [!NOTE]
+> If you encounter any issues not covered here, please [open an issue](https://github.com/[username]/SpeedyFibonacci/issues) on GitHub.
+
+[← Back to Main README](../README.md)
+
+</div>

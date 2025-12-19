@@ -1,12 +1,28 @@
-# Iterative Space-Optimized
+<div align="center">
 
-## Overview
+# 💨 Iterative Space-Optimized
 
-The space-optimized iterative approach is the most practical pure Python solution for computing Fibonacci numbers. It achieves O(n) time with O(1) space by observing that only the last two values are needed at any point.
+**The Most Practical Pure Python Fibonacci Solution**
 
-## Algorithm Description
+[← Back to Techniques](../../README.md#-implemented-techniques)
 
-The key insight is that F(n) only depends on F(n-1) and F(n-2), so we don't need to store the entire sequence.
+</div>
+
+---
+
+## 🏃 Overview
+
+The space-optimized iterative approach is the most practical pure Python solution for computing Fibonacci numbers. It achieves **O(n) time** with **O(1) space** by observing that only the last two values are needed at any point.
+
+**Why this matters:** No recursion overhead, no array allocation—just two variables rolling through the sequence.
+
+## 🔍 Algorithm Description
+
+The key insight: **F(n) only depends on F(n-1) and F(n-2)**, so we don't need to store the entire sequence.
+
+### Core Concept
+
+Instead of building an array of all values, we maintain a sliding window of just two consecutive Fibonacci numbers.
 
 ```python
 def fibonacci(n):
@@ -52,39 +68,32 @@ FUNCTION fibonacci(n):
     RETURN b
 ```
 
-## Complexity Analysis
+## 📊 Complexity Analysis
 
-### Time Complexity: O(n)
+| Aspect | Complexity | Details |
+|--------|-----------|----------|
+| **Time** | **O(n)** | Single loop from 2 to n; each iteration is O(1) |
+| **Space** | **O(1)** | Only two variables (a, b) regardless of n |
+| **Per Iteration** | O(1) | One addition + two assignments via tuple swap |
 
-- Single loop from 2 to n
-- Each iteration: O(1) operations
-  - One addition
-  - Two assignments (via tuple swap)
-- Total: O(n)
+> [!NOTE]
+> The result F(n) itself grows exponentially (F(n) has about 0.21n digits), so the space to store the result is O(n). But the algorithm's **auxiliary space is O(1)**.
 
-### Space Complexity: O(1)
+## ⚡ Performance Characteristics
 
-- Only two variables (a, b) regardless of n
-- No array, no recursion stack
-- Constant auxiliary space
+| n | Time (approx) | Memory | Use Case |
+|---|--------------|--------|----------|
+| 100 | < 1ms | O(1) | Quick testing |
+| 1,000 | < 1ms | O(1) | Small values |
+| 10,000 | ~5ms | O(1) | Medium values |
+| 100,000 | ~500ms | O(1) | Large values |
+| 1,000,000 | ~1 min | O(1) | Very large values |
 
-**Note**: The result F(n) itself grows exponentially (F(n) has about 0.21n digits), so the space to store the result is O(n). But the algorithm's auxiliary space is O(1).
+**🏆 In our 1-second benchmark**: This is typically **one of the fastest pure Python methods** due to its simplicity and low overhead.
 
-## Performance Characteristics
+## 🐍 Python's Elegant Tuple Swap
 
-| n | Time (approx) | Memory |
-|---|--------------|--------|
-| 100 | < 1ms | O(1) |
-| 1,000 | < 1ms | O(1) |
-| 10,000 | ~5ms | O(1) |
-| 100,000 | ~500ms | O(1) |
-| 1,000,000 | ~1 min | O(1) |
-
-**In our 1-second benchmark**: This is typically one of the fastest pure Python methods due to its simplicity and low overhead.
-
-## Python's Tuple Swap
-
-The line `a, b = b, a + b` is particularly elegant:
+The line `a, b = b, a + b` is a beautiful example of Pythonic elegance:
 
 ### How It Works
 
@@ -161,23 +170,23 @@ fib = lambda n: (lambda a,b,n: b if n<2 else fib(n-1)+fib(n-2))(0,1,n)
 | Generator | O(1) | Generator protocol | Streaming |
 | Memoized | O(n) | Cache management | Repeated queries |
 
-## When to Use
+## ✅ When to Use
 
-**Use this technique when:**
+### ✓ Use When
 - Computing a single Fibonacci number
-- Memory is constrained
-- Simplicity is valued
-- Teaching basic algorithms
-- Most practical applications
+- Memory is constrained (embedded systems, microcontrollers)
+- Simplicity and readability matter most
+- Teaching basic algorithms to beginners
+- For most practical applications
 
-**Don't use when:**
-- Need all F(0)...F(n) (use DP array)
-- Need repeated random access (use memoization)
-- n is extremely large (use O(log n) methods)
+### ✗ Don't Use When
+- Need all F(0)...F(n) simultaneously (use DP array instead)
+- Need repeated random access to intermediate values (use memoization)
+- n is extremely large (use O(log n) methods like Fast Doubling)
 
-## Optimizations
+## 🚀 Advanced Optimizations
 
-### Loop unrolling (minor improvement)
+### Loop Unrolling (Minor Improvement)
 ```python
 def fib_unrolled(n):
     if n <= 1:
@@ -195,7 +204,7 @@ def fib_unrolled(n):
     return b
 ```
 
-### Local variable optimization
+### Local Variable Optimization
 ```python
 def fib_local(n):
     # Accessing local variables is faster than global
@@ -211,17 +220,14 @@ def fib_local(n):
     return b
 ```
 
-## References
+## 📚 References
 
-1. Sedgewick, R., & Wayne, K. (2011). *Algorithms* (4th ed.). Addison-Wesley. Section 1.1.
+1. **Sedgewick, R., & Wayne, K.** (2011). *Algorithms* (4th ed.). Addison-Wesley. Section 1.1.
+2. **Cormen, T.H., et al.** (2009). *Introduction to Algorithms* (3rd ed.). MIT Press.
+3. **Lutz, M.** (2013). *Learning Python* (5th ed.). O'Reilly Media. [Python tuple unpacking]
+4. **Python Documentation.** "More on Defining Functions". https://docs.python.org/3/tutorial/controlflow.html
 
-2. Cormen, T.H., et al. (2009). *Introduction to Algorithms* (3rd ed.). MIT Press.
-
-3. Lutz, M. (2013). *Learning Python* (5th ed.). O'Reilly Media. [Python tuple unpacking]
-
-4. Python Documentation. "More on Defining Functions". https://docs.python.org/3/tutorial/controlflow.html
-
-## Example
+## 💡 Example Usage
 
 ```python
 from techniques.10_iterative_space_optimized.fibonacci import IterativeSpaceOptimized

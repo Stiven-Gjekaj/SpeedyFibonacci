@@ -1,35 +1,58 @@
-# Binet's Formula
+<div align="center">
 
-## Overview
+# 🌟 Binet's Formula
 
-Binet's formula provides a closed-form expression for computing Fibonacci numbers directly using the golden ratio, without iteration or recursion. This elegant mathematical formula demonstrates the deep connection between the Fibonacci sequence and the golden ratio.
+[![Complexity](https://img.shields.io/badge/Time-O(1)*-brightgreen?style=flat-square)]()
+[![Space](https://img.shields.io/badge/Space-O(1)-brightgreen?style=flat-square)]()
+[![Type](https://img.shields.io/badge/Type-Closed--Form-blue?style=flat-square)]()
+[![Math](https://img.shields.io/badge/Uses-Golden_Ratio-gold?style=flat-square)]()
 
-## Algorithm Description
+*The elegant closed-form formula using the golden ratio φ*
 
-Binet's formula states:
+</div>
 
+---
+
+## 📖 Overview
+
+Binet's formula provides a **closed-form expression** for computing Fibonacci numbers directly using the golden ratio, without iteration or recursion. This elegant mathematical formula demonstrates the deep connection between the Fibonacci sequence and φ.
+
+> [!IMPORTANT]
+> *O(1) assumes bounded precision. For arbitrary precision, computing φⁿ for n-bit precision takes O(n) time.
+
+---
+
+## 🔢 Algorithm Description
+
+### The Formula
+
+```mermaid
+flowchart TD
+    subgraph Formula["🌟 Binet's Formula"]
+        F["F(n) = (φⁿ - ψⁿ) / √5"]
+    end
+
+    subgraph Constants["📐 Constants"]
+        PHI["φ = (1 + √5) / 2 ≈ 1.618"]
+        PSI["ψ = (1 - √5) / 2 ≈ -0.618"]
+        SQRT5["√5 ≈ 2.236"]
+    end
+
+    PHI --> F
+    PSI --> F
+    SQRT5 --> F
+
+    style Formula fill:#f39c12,stroke:#d35400,color:#fff
+    style Constants fill:#3498db,stroke:#2980b9,color:#fff
 ```
-        φⁿ - ψⁿ
-F(n) = ─────────
-          √5
-```
 
-Where:
-- φ (phi) = (1 + √5) / 2 ≈ 1.6180339887... (golden ratio)
-- ψ (psi) = (1 - √5) / 2 ≈ -0.6180339887... (conjugate of phi)
-- √5 ≈ 2.2360679775...
-
-### Simplified Form
+### Simplified Approximation
 
 Since |ψ| < 1, the term ψⁿ becomes negligible for large n:
 
-```
-F(n) ≈ φⁿ / √5  (rounded to nearest integer)
-```
+$$F(n) \approx \frac{\phi^n}{\sqrt{5}} \quad \text{(rounded to nearest integer)}$$
 
-This gives an even simpler approximation!
-
-### Implementation
+### Python Implementation
 
 ```python
 from decimal import Decimal, getcontext
@@ -46,29 +69,45 @@ def fibonacci(n):
     return int(result.to_integral_value())
 ```
 
-## Complexity Analysis
+---
 
-### Time Complexity: O(1)*
+## 📊 Complexity Analysis
 
-Theoretically O(1) - a direct calculation with no loops or recursion.
+### ⏱️ Time Complexity: `O(1)*`
 
-*Caveat: Exponentiation of large numbers and high-precision arithmetic have their own complexity. For k-bit precision and exponent n:
-- Naive exponentiation: O(n × M(k)) where M(k) is multiplication cost
-- Binary exponentiation: O(log n × M(k))
+| Component | Cost |
+|-----------|------|
+| Constant operations | O(1) |
+| Exponentiation (fixed precision) | O(1) |
+| High precision exponentiation | O(log n × M(k)) |
 
-For practical purposes with bounded precision, it's effectively O(1).
-
-### Space Complexity: O(1)
+### 💾 Space Complexity: `O(1)`
 
 Only stores a constant number of values regardless of n.
 
-## Mathematical Background
+---
 
-### Proof of Binet's Formula
+## 📈 Precision Requirements
 
-The Fibonacci recurrence F(n) = F(n-1) + F(n-2) is a linear homogeneous recurrence relation with constant coefficients.
+| n | Precision Needed | Float64 Accurate? |
+|:-:|:---------------:|:-----------------:|
+| 10 | Low | ✅ Yes |
+| 50 | Medium | ✅ Yes |
+| 70 | High | ⚠️ Borderline |
+| 100 | Very High | ❌ Use Decimal |
+| 1000 | Extreme | ❌ High precision |
 
-**Step 1**: Write the characteristic equation
+> [!WARNING]
+> Standard floating-point (float64) loses accuracy around n=70. Use `Decimal` for larger values.
+
+---
+
+## 🔬 Mathematical Background
+
+<details>
+<summary>📝 <strong>Proof of Binet's Formula</strong></summary>
+
+**Step 1**: Characteristic equation
 ```
 x² = x + 1
 x² - x - 1 = 0
@@ -77,19 +116,18 @@ x² - x - 1 = 0
 **Step 2**: Solve using quadratic formula
 ```
 x = (1 ± √5) / 2
+φ = (1+√5)/2, ψ = (1-√5)/2
 ```
-This gives φ = (1+√5)/2 and ψ = (1-√5)/2.
 
 **Step 3**: General solution form
 ```
 F(n) = Aφⁿ + Bψⁿ
 ```
 
-**Step 4**: Use initial conditions F(0)=0, F(1)=1
+**Step 4**: Apply initial conditions
 ```
 F(0) = A + B = 0         → B = -A
-F(1) = Aφ + Bψ = 1       → A(φ - ψ) = 1
-                         → A = 1/√5, B = -1/√5
+F(1) = Aφ + Bψ = 1       → A = 1/√5, B = -1/√5
 ```
 
 **Step 5**: Final formula
@@ -97,37 +135,39 @@ F(1) = Aφ + Bψ = 1       → A(φ - ψ) = 1
 F(n) = (φⁿ - ψⁿ) / √5
 ```
 
-### The Golden Ratio
+</details>
 
-The golden ratio φ appears throughout nature, art, and mathematics:
-- Ratio of consecutive Fibonacci numbers approaches φ
-- φ² = φ + 1
-- 1/φ = φ - 1
-- φ = 1 + 1/(1 + 1/(1 + 1/...)) (continued fraction)
+<details>
+<summary>✨ <strong>The Golden Ratio</strong></summary>
 
-### Why ψⁿ Vanishes
+| Property | Formula | Value |
+|----------|---------|-------|
+| Definition | φ = (1 + √5) / 2 | ≈ 1.618 |
+| Self-squaring | φ² = φ + 1 | 2.618... |
+| Reciprocal | 1/φ = φ - 1 | 0.618... |
+| Continued fraction | 1 + 1/(1 + 1/(1 + ...)) | φ |
 
-Since |ψ| = |(1-√5)/2| ≈ 0.618 < 1:
-- ψ¹ ≈ -0.618
-- ψ⁵ ≈ -0.090
-- ψ¹⁰ ≈ 0.008
-- ψ²⁰ ≈ 0.00007
+</details>
 
-For practical computation, F(n) ≈ round(φⁿ/√5) works for all n.
+<details>
+<summary>📉 <strong>Why ψⁿ Vanishes</strong></summary>
 
-## Performance Characteristics
+Since |ψ| ≈ 0.618 < 1:
 
-| n | Precision Needed | Float64 Accurate? |
-|---|-----------------|-------------------|
-| 10 | Low | Yes |
-| 50 | Medium | Yes |
-| 70 | High | Borderline |
-| 100 | Very High | No (use Decimal) |
-| 1000 | Extreme | Decimal with high prec |
+| n | ψⁿ |
+|:-:|:--:|
+| 1 | -0.618 |
+| 5 | -0.090 |
+| 10 | 0.008 |
+| 20 | 0.00007 |
 
-**In our 1-second benchmark**: Binet's formula is extremely fast due to O(1) nature, but precision concerns mean we use Decimal arithmetic which adds overhead.
+For practical computation: **F(n) ≈ round(φⁿ/√5)** works for all n!
 
-## Implementation Details
+</details>
+
+---
+
+## 🐍 Implementation Details
 
 ### Floating Point Version (Fast but Limited)
 
@@ -141,7 +181,7 @@ def fib_float(n):
     return round(PHI**n / SQRT5)
 ```
 
-This works for n ≤ 70 approximately.
+> Works for n ≤ ~70
 
 ### Decimal Version (Accurate)
 
@@ -157,48 +197,69 @@ def fib_decimal(n):
     return int(result.to_integral_value())
 ```
 
-### Precision Requirements
+### Precision Formula
 
-To accurately compute F(n), you need roughly:
-- log₁₀(F(n)) ≈ n × log₁₀(φ) ≈ 0.209n decimal digits
-- F(100) has ~21 digits
-- F(1000) has ~209 digits
-- F(10000) has ~2090 digits
+To accurately compute F(n), you need:
+```
+digits ≈ n × log₁₀(φ) ≈ 0.209n decimal digits
+```
 
-Set `getcontext().prec` accordingly.
+| n | F(n) Digits |
+|:-:|:-----------:|
+| 100 | ~21 |
+| 1,000 | ~209 |
+| 10,000 | ~2,090 |
 
-## When to Use
+---
 
-**Use this technique when:**
-- Computing a single Fibonacci number
-- Demonstrating mathematical elegance
-- Teaching the golden ratio connection
-- Need O(1) complexity (with fixed precision)
-
-**Don't use when:**
-- Computing many sequential Fibonacci numbers
-- Extremely large n (matrix or fast doubling better)
-- Exact precision is critical without careful setup
-
-## Historical Note
+## 📜 Historical Note
 
 Although called "Binet's Formula," it was known to:
-- Abraham de Moivre (1718)
-- Daniel Bernoulli (1728)
-- Leonhard Euler (1765)
-- Jacques Philippe Marie Binet (1843) - published explicit form
 
-## References
+```mermaid
+timeline
+    title Formula Discovery Timeline
+    1718 : Abraham de Moivre
+    1728 : Daniel Bernoulli
+    1765 : Leonhard Euler
+    1843 : Jacques Binet (published explicit form)
+```
 
-1. Binet, J.P.M. (1843). "Mémoire sur l'intégration des équations linéaires aux différences finies, d'un ordre quelconque, à coefficients variables". *Comptes Rendus de l'Académie des Sciences*, Paris.
+---
 
-2. Koshy, T. (2001). *Fibonacci and Lucas Numbers with Applications*. Wiley-Interscience.
+## ✅ When to Use
 
-3. Vorobiev, N.N. (2002). *Fibonacci Numbers*. Birkhäuser.
+```mermaid
+flowchart TD
+    A{Use Binet's Formula?} -->|Yes| B["✅ Single Fibonacci number"]
+    A -->|Yes| C["✅ Demonstrating elegance"]
+    A -->|Yes| D["✅ Teaching golden ratio"]
+    A -->|No| E["❌ Sequential computation"]
+    A -->|No| F["❌ Very large n (use matrix)"]
+    A -->|No| G["❌ Exact precision critical"]
 
-4. Dunlap, R.A. (1997). *The Golden Ratio and Fibonacci Numbers*. World Scientific.
+    style B fill:#27ae60,stroke:#1e8449,color:#fff
+    style C fill:#27ae60,stroke:#1e8449,color:#fff
+    style D fill:#27ae60,stroke:#1e8449,color:#fff
+    style E fill:#e74c3c,stroke:#c0392b,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,color:#fff
+```
 
-## Example
+---
+
+## 📚 References
+
+| # | Citation | Topic |
+|:-:|----------|-------|
+| 1 | **Binet, J.P.M.** (1843). *Comptes Rendus de l'Académie des Sciences*, Paris. | Original publication |
+| 2 | **Koshy, T.** (2001). *Fibonacci and Lucas Numbers with Applications*. Wiley. | Comprehensive reference |
+| 3 | **Vorobiev, N.N.** (2002). *Fibonacci Numbers*. Birkhäuser. | Accessible introduction |
+| 4 | **Dunlap, R.A.** (1997). *The Golden Ratio and Fibonacci Numbers*. World Scientific. | Golden ratio |
+
+---
+
+## 💻 Example Usage
 
 ```python
 from techniques.05_binets_formula.fibonacci import BinetsFormula
@@ -215,3 +276,11 @@ phi = 1.6180339887498949
 sqrt5 = 2.23606797749979
 print(f"F(10) ≈ {round(phi**10 / sqrt5)}")  # 55
 ```
+
+---
+
+<div align="center">
+
+[← Back to Main README](../../README.md)
+
+</div>

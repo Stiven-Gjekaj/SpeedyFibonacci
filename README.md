@@ -30,8 +30,8 @@ flowchart LR
     end
 
     subgraph Benchmark["⏱️ 1 Second Benchmark"]
-        B[Start Timer] --> C{Time < 1s?}
-        C -->|Yes| D[Calculate F\(n\)]
+        B[Start Timer] --> C{Time less than 1s?}
+        C -->|Yes| D[Calculate Fibonacci]
         D --> E[Validate Result]
         E --> F[Increment n]
         F --> C

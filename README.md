@@ -373,7 +373,7 @@ See [docs/CITATIONS.md](docs/CITATIONS.md) for complete bibliography.
 ```
 MIT License
 
-Copyright (c) 2024 SpeedyFibonacci Contributors
+Copyright (c) 2025 SpeedyFibonacci
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files.

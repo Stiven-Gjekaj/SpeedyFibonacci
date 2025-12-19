@@ -263,7 +263,7 @@ SpeedyFibonacci/
 mindmap
   root((SpeedyFibonacci))
     Algorithm Complexity
-      O(2^n) vs O(n) vs O(log n)
+      Exponential vs Linear vs Logarithmic
       Real-world performance
       Call tree visualization
     Dynamic Programming
@@ -275,7 +275,7 @@ mindmap
       Numba JIT compilation
       Cython C extensions
     Mathematics
-      Golden ratio φ
+      Golden ratio phi
       Matrix identities
       Binet's formula
     Software Design

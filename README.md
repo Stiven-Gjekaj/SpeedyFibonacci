@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔢 SpeedyFibonacci
+![SpeedyFibonacci Logo](SpeedyFibonnaci.png)
 
 **An Educational Benchmark Suite for Fibonacci Calculation Techniques in Python**
 

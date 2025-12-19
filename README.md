@@ -24,6 +24,7 @@
 ## 🎯 What This Project Does
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#2d1b69', 'primaryTextColor': '#e6e8ef', 'primaryBorderColor': '#7c3aed', 'lineColor': '#7c3aed', 'secondBkgColor': '#111217', 'tertiaryColor': '#1a1a2e'}}}%%
 flowchart LR
     subgraph Input
         A[🔢 Technique]
@@ -49,9 +50,9 @@ flowchart LR
     G --> I
     G --> J
 
-    style Benchmark fill:#1a1a2e,stroke:#16213e,color:#fff
-    style Input fill:#0f3460,stroke:#16213e,color:#fff
-    style Output fill:#533483,stroke:#16213e,color:#fff
+    style Benchmark fill:#1a1a2e,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style Input fill:#0f3460,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style Output fill:#2d1b69,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
 ```
 
 Each technique runs for **exactly 1 second**, computing Fibonacci numbers F(0), F(1), F(2), ... until time runs out.
@@ -122,6 +123,7 @@ python scripts/setup_cython.py build_ext --inplace
 ## 🧮 Implemented Techniques
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#2d1b69', 'primaryTextColor': '#e6e8ef', 'primaryBorderColor': '#7c3aed', 'lineColor': '#7c3aed', 'secondBkgColor': '#111217', 'tertiaryColor': '#1a1a2e'}}}%%
 graph TD
     subgraph Exponential["🔴 Exponential O(2^n)"]
         A[Naive Recursion]
@@ -147,10 +149,10 @@ graph TD
         L[Binet's Formula]
     end
 
-    style Exponential fill:#e74c3c,stroke:#c0392b,color:#fff
-    style Linear fill:#f39c12,stroke:#d35400,color:#fff
-    style Logarithmic fill:#27ae60,stroke:#1e8449,color:#fff
-    style Constant fill:#3498db,stroke:#2980b9,color:#fff
+    style Exponential fill:#7d3c3c,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style Linear fill:#7d5d2d,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style Logarithmic fill:#2d7d3c,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style Constant fill:#2d4d7d,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
 ```
 
 | # | Technique | Time | Space | Description |
@@ -260,6 +262,7 @@ SpeedyFibonacci/
 ## 🎓 Educational Value
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#2d1b69', 'primaryTextColor': '#e6e8ef', 'primaryBorderColor': '#7c3aed', 'lineColor': '#7c3aed', 'secondBkgColor': '#111217', 'tertiaryColor': '#1a1a2e'}}}%%
 mindmap
   root((SpeedyFibonacci))
     Algorithm Complexity
@@ -329,17 +332,18 @@ pytest tests/ -v --cov=.
 ## 🤝 Contributing
 
 ```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#2d1b69', 'primaryTextColor': '#e6e8ef', 'primaryBorderColor': '#7c3aed', 'lineColor': '#7c3aed', 'secondBkgColor': '#111217', 'tertiaryColor': '#1a1a2e'}}}%%
 flowchart LR
     A[1️⃣ Create Folder] --> B[2️⃣ Implement Class]
     B --> C[3️⃣ Write README]
     C --> D[4️⃣ Add Tests]
     D --> E[5️⃣ Submit PR]
 
-    style A fill:#3498db,stroke:#2980b9,color:#fff
-    style B fill:#9b59b6,stroke:#8e44ad,color:#fff
-    style C fill:#e74c3c,stroke:#c0392b,color:#fff
-    style D fill:#f39c12,stroke:#d35400,color:#fff
-    style E fill:#27ae60,stroke:#1e8449,color:#fff
+    style A fill:#2d1b69,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style B fill:#2d1b69,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style C fill:#7d3c3c,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style D fill:#7d5d2d,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
+    style E fill:#2d7d3c,stroke:#7c3aed,color:#e6e8ef,stroke-width:2px
 ```
 
 1. Add new technique in `techniques/XX_name/`
